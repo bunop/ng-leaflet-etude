@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { icon, latLng, marker, polyline, tileLayer } from 'leaflet';
+import { icon, latLng, Map, marker, point, polyline, tileLayer } from 'leaflet';
 
 @Component({
   selector: 'app-root',
@@ -77,5 +77,13 @@ export class AppComponent {
     zoom: 7,
     center: latLng([ 46.879966, -121.726909 ])
   };
+
+  onMapReady(map: Map) {
+    map.fitBounds(this.route.getBounds(), {
+      padding: point(24, 24),
+      maxZoom: 12,
+      animate: true
+    });
+  }
 
 }
