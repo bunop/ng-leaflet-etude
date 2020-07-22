@@ -11,11 +11,11 @@ before_script:
 script:
 - ng lint
 - npm run test-headless
-- ng build --prod --base-href https://bunop.github.io/ng-travis-demo/
+- ng build --prod --base-href https://bunop.github.io/ng-leaflet-etude/
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  local_dir: dist/ng-travis-demo
+  local_dir: dist/ng-leaflet-etude
   on:
     branch: master
