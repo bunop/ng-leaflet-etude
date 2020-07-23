@@ -1,9 +1,4 @@
 
-<router-outlet></router-outlet>
+<title>{{ title }}</title>
 
-<div class="map"
-  leaflet
-  (leafletMapReady)="onMapReady($event)"
-  [leafletOptions]="options"
-  [leafletLayersControl]="layersControl">
-</div>
+<router-outlet></router-outlet>

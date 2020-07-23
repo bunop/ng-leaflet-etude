@@ -1,15 +1,12 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { By } from '@angular/platform-browser';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        LeafletModule
+        RouterTestingModule
       ],
       declarations: [
         AppComponent
@@ -29,10 +26,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('ng-leaflet-etude');
   });
 
-  it('should have a leaflet map', () => {
+  it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const leaflet = fixture.debugElement.query(By.css('[leaflet]'));
-    expect(leaflet).toBeTruthy();
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('title').textContent).toContain('ng-leaflet-etude');
   });
 });
