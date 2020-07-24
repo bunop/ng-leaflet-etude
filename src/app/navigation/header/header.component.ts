@@ -20,7 +20,6 @@ export class HeaderComponent implements OnInit {
     this.sidenavToggle.emit();
     // get access to nativeElement (the html object) and call blur (remove focus)
     this.toggleSidenav._elementRef.nativeElement.blur();
-    this.toggleSidenav
   }
 
 }
