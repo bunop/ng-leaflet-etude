@@ -1,22 +1,26 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { LayoutComponent } from './layout/layout.component';
 import { MaterialModule } from './material/material.module';
 import { HomeComponent } from './home/home.component';
+import { HeaderComponent } from './navigation/header/header.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
+        BrowserAnimationsModule,
         MaterialModule,
       ],
       declarations: [
         AppComponent,
         LayoutComponent,
-        HomeComponent
+        HomeComponent,
+        HeaderComponent
       ],
     }).compileComponents();
   }));
