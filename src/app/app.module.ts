@@ -12,6 +12,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { AsymmetricTutorialComponent } from './asymmetric-tutorial/asymmetric-tutorial.component';
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './navigation/header/header.component';
+import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { HeaderComponent } from './navigation/header/header.component';
     LayoutComponent,
     AsymmetricTutorialComponent,
     HomeComponent,
-    HeaderComponent
+    HeaderComponent,
+    SidenavListComponent
   ],
   imports: [
     BrowserModule,
