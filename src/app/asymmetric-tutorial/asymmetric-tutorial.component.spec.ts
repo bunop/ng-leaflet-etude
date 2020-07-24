@@ -28,7 +28,7 @@ describe('AsymmetricTutorialComponent', () => {
   });
 
   it('should have a leaflet map', () => {
-    const fixture = TestBed.createComponent(AsymmetricTutorialComponent);
+    fixture = TestBed.createComponent(AsymmetricTutorialComponent);
     fixture.detectChanges();
     const leaflet = fixture.debugElement.query(By.css('[leaflet]'));
     expect(leaflet).toBeTruthy();

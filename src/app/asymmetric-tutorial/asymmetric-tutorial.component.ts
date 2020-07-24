@@ -7,12 +7,6 @@ import { icon, latLng, Map, marker, point, polyline, tileLayer } from 'leaflet';
   styleUrls: ['./asymmetric-tutorial.component.css']
 })
 export class AsymmetricTutorialComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
   // Define our base layers so we can reference them multiple times
   streetMaps = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     detectRetina: true,
@@ -34,7 +28,7 @@ export class AsymmetricTutorialComponent implements OnInit {
   });
 
   // Marker for the parking lot at the base of Mt. Ranier trails
-  paradise = marker([ 46.78465227596462,-121.74141269177198 ], {
+  paradise = marker([ 46.78465227596462, -121.74141269177198 ], {
     icon: icon({
       iconSize: [ 25, 41 ],
       iconAnchor: [ 13, 41 ],
@@ -45,7 +39,7 @@ export class AsymmetricTutorialComponent implements OnInit {
   });
 
   // Path from paradise to summit - most points omitted from this example for brevity
-  route = polyline([[ 46.78465227596462,-121.74141269177198 ],
+  route = polyline([[ 46.78465227596462, -121.74141269177198 ],
     [ 46.80047278292477, -121.73470708541572 ],
     [ 46.815471360459924, -121.72521826811135 ],
     [ 46.8360239546746, -121.7323131300509 ],
@@ -61,26 +55,31 @@ export class AsymmetricTutorialComponent implements OnInit {
     [ 46.85290292836726, -121.76049157977104 ],
     [ 46.8528160918504, -121.76042997278273 ]]);
 
-  // Layers control object with our two base layers and the three overlay layers
-  layersControl = {
-    baseLayers: {
-      'Street Maps': this.streetMaps,
-      'Wikimedia Maps': this.wMaps
-    },
-    overlays: {
-      'Mt. Rainier Summit': this.summit,
-      'Mt. Rainier Paradise Start': this.paradise,
-      'Mt. Rainier Climb Route': this.route
-    }
-  };
+    // Layers control object with our two base layers and the three overlay layers
+    layersControl = {
+      baseLayers: {
+        'Street Maps': this.streetMaps,
+        'Wikimedia Maps': this.wMaps
+      },
+      overlays: {
+        'Mt. Rainier Summit': this.summit,
+        'Mt. Rainier Paradise Start': this.paradise,
+        'Mt. Rainier Climb Route': this.route
+      }
+    };
 
 
-  // Set the initial set of displayed layers (we could also use the leafletLayers input binding for this)
-  options = {
-    layers: [ this.streetMaps, this.route, this.summit, this.paradise ],
-    zoom: 7,
-    center: latLng([ 46.879966, -121.726909 ])
-  };
+    // Set the initial set of displayed layers (we could also use the leafletLayers input binding for this)
+    options = {
+      layers: [ this.streetMaps, this.route, this.summit, this.paradise ],
+      zoom: 7,
+      center: latLng([ 46.879966, -121.726909 ])
+    };
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 
   onMapReady(map: Map) {
     map.fitBounds(this.route.getBounds(), {
