@@ -4,7 +4,7 @@ import { icon, latLng, Map, marker, point, polyline, tileLayer } from 'leaflet';
 @Component({
   selector: 'app-asymmetric-tutorial',
   templateUrl: './asymmetric-tutorial.component.html',
-  styleUrls: ['./asymmetric-tutorial.component.css']
+  styleUrls: ['./asymmetric-tutorial.component.scss']
 })
 export class AsymmetricTutorialComponent implements OnInit {
   // Define our base layers so we can reference them multiple times
