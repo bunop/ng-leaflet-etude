@@ -6,7 +6,7 @@ import { AsymmetricTutorialComponent } from './asymmetric-tutorial/asymmetric-tu
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'tutorial', component: AsymmetricTutorialComponent },
+  { path: 'asymmetric-tutorial', component: AsymmetricTutorialComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
