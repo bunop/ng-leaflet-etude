@@ -1,17 +1,38 @@
-language: node_js
-node_js:
-  - "10"
+
 dist: bionic
-sudo: required
+sudo: false
+
 branches:
   only:
   - master
-before_script:
-  - npm install -g @angular/cli
+
+language: node_js
+node_js:
+  - "10"
+
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+cache:
+  directories:
+     - ./node_modules
+
+install:
+  - npm install
+
 script:
-- ng lint
-- npm run test-headless
-- ng build --prod --base-href https://bunop.github.io/ng-leaflet-etude/
+  # Runs linting tools on Angular app code in a given project folder
+  - ng lint
+  # executing tests
+  - ng test --no-watch --no-progress --browsers=ChromeHeadlessCI
+  - ng e2e --protractor-config=e2e/protractor-ci.conf.js
+  # Build site for github pages
+  - ng build --prod --base-href https://bunop.github.io/ng-leaflet-etude/
+
 deploy:
   provider: pages
   skip_cleanup: true
