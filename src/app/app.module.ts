@@ -13,6 +13,7 @@ import { AsymmetricTutorialComponent } from './asymmetric-tutorial/asymmetric-tu
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
+import { ImageGisSearchComponent } from './image-gis-search/image-gis-search.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
     AsymmetricTutorialComponent,
     HomeComponent,
     HeaderComponent,
-    SidenavListComponent
+    SidenavListComponent,
+    ImageGisSearchComponent
   ],
   imports: [
     BrowserModule,
