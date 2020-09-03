@@ -1,5 +1,8 @@
 # NgLeafletEtude
 
+[![Build Status](https://travis-ci.com/bunop/ng-leaflet-etude.svg?branch=master)](https://travis-ci.com/bunop/ng-leaflet-etude)
+[![GitHub deployments](https://img.shields.io/github/deployments/bunop/ng-leaflet-etude/github-pages)](https://bunop.github.io/ng-leaflet-etude/)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.7.
 
 ## Development server
