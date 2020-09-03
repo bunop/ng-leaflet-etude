@@ -29,7 +29,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
+              "src/styles.scss",
               "./node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
@@ -99,7 +99,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
+              "src/styles.scss",
               "./node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
@@ -131,6 +131,12 @@
           }
         }
       }
-    }},
-  "defaultProject": "ng-leaflet-etude"
+    }
+  },
+  "defaultProject": "ng-leaflet-etude",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

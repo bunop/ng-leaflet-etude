@@ -1,0 +1,11 @@
+
+<div fxFlexAlign="center">
+  <h1>Leaflet Map</h1>
+</div>
+
+<div class="map"
+  leaflet
+  (leafletMapReady)="onMapReady($event)"
+  [leafletOptions]="options"
+  [leafletLayersControl]="layersControl">
+</div>
