@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { GeoJSON, latLng, Map, tileLayer, point } from 'leaflet';
+import * as L from 'leaflet';
+import 'leaflet.markercluster';
 import "leaflet/dist/images/marker-shadow.png";
 
 import { CdpService } from './cdp.service';
@@ -11,16 +12,16 @@ import { CdpService } from './cdp.service';
   styleUrls: ['./image-gis-search.component.scss']
 })
 export class ImageGisSearchComponent implements OnInit {
-  organisms: GeoJSON;
-  specimens: GeoJSON;
-  map: Map;
+  organisms: L.GeoJSON;
+  specimens: L.GeoJSON;
+  map: L.Map;
 
   // Define our base layers so we can reference them multiple times
-  streetMaps = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  streetMaps = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     detectRetina: true,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   });
-  wMaps = tileLayer('http://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
+  wMaps = L.tileLayer('http://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
     detectRetina: true,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   });
@@ -40,8 +41,13 @@ export class ImageGisSearchComponent implements OnInit {
   options = {
     layers: this.layers,
     zoom: 4,
-    center: latLng([ 40, 5 ])
+    center: L.latLng([ 40, 5 ])
   };
+
+  // Marker cluster stuff
+	markerClusterGroup: L.MarkerClusterGroup;
+  markerClusterData: L.Marker[] = [];
+	markerClusterOptions: L.MarkerClusterGroupOptions;
 
   constructor(private cdpService: CdpService) { }
 
@@ -49,32 +55,39 @@ export class ImageGisSearchComponent implements OnInit {
     // get organisms data
     this.cdpService.getOrganisms().subscribe(organisms => {
       this.organisms = organisms;
-      this.organisms.addTo(this.map);
+      // this.organisms.addTo(this.map);
+      this.markerClusterGroup.addLayer(this.organisms);
 
-      this.layersControl.overlays['organisms'] = this.organisms;
+      this.layersControl.overlays['organisms'] = this.markerClusterGroup;
     });
 
     // get specimens data
     this.cdpService.getSpecimens().subscribe(specimens => {
       this.specimens = specimens;
-      this.specimens.addTo(this.map);
+      // this.specimens.addTo(this.map);
+      this.markerClusterGroup.addLayer(this.specimens);
 
-      this.layersControl.overlays['specimens'] = this.specimens;
+      this.layersControl.overlays['specimens'] = this.markerClusterGroup;
 
       this.map.fitBounds(this.specimens.getBounds(), {
-        padding: point(24, 24),
+        padding: L.point(24, 24),
         maxZoom: 12,
         animate: true
       });
     });
   }
 
-  onMapReady(map: Map) {
+  onMapReady(map: L.Map) {
     this.map = map;
 
     this.map.on("click", e => {
       console.log(e);
     });
+  }
+
+  markerClusterReady(group: L.MarkerClusterGroup) {
+    // Do stuff with group
+    this.markerClusterGroup = group;
   }
 
 }
