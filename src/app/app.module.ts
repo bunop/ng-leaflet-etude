@@ -4,6 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletMarkerClusterModule } from "@asymmetrik/ngx-leaflet-markercluster";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,6 +36,7 @@ import { ImageGisSearchComponent } from './image-gis-search/image-gis-search.com
     // import HttpClientModule after BrowserModule.
     HttpClientModule,
     LeafletModule,
+    LeafletMarkerClusterModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
