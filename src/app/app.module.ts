@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
@@ -31,6 +32,8 @@ import { ImageGisSearchComponent } from './image-gis-search/image-gis-search.com
     BrowserAnimationsModule,
     MaterialModule,
     FlexLayoutModule,
+    // import HttpClientModule after BrowserModule.
+    HttpClientModule,
     LeafletModule,
   ],
   providers: [],
