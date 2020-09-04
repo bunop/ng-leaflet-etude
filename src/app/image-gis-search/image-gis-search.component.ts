@@ -12,6 +12,7 @@ import { CdpService } from './cdp.service';
 })
 export class ImageGisSearchComponent implements OnInit {
   organisms: GeoJSON;
+  specimens: GeoJSON;
   map: Map;
 
   // Define our base layers so we can reference them multiple times
@@ -38,8 +39,8 @@ export class ImageGisSearchComponent implements OnInit {
   // Set the initial set of displayed layers (we could also use the leafletLayers input binding for this)
   options = {
     layers: this.layers,
-    zoom: 7,
-    center: latLng([ 46.879966, -121.726909 ])
+    zoom: 4,
+    center: latLng([ 40, 5 ])
   };
 
   constructor(private cdpService: CdpService) { }
@@ -51,8 +52,16 @@ export class ImageGisSearchComponent implements OnInit {
       this.organisms.addTo(this.map);
 
       this.layersControl.overlays['organisms'] = this.organisms;
+    });
 
-      this.map.fitBounds(this.organisms.getBounds(), {
+    // get specimens data
+    this.cdpService.getSpecimens().subscribe(specimens => {
+      this.specimens = specimens;
+      this.specimens.addTo(this.map);
+
+      this.layersControl.overlays['specimens'] = this.specimens;
+
+      this.map.fitBounds(this.specimens.getBounds(), {
         padding: point(24, 24),
         maxZoom: 12,
         animate: true
@@ -62,6 +71,10 @@ export class ImageGisSearchComponent implements OnInit {
 
   onMapReady(map: Map) {
     this.map = map;
+
+    this.map.on("click", e => {
+      console.log(e);
+    });
   }
 
 }

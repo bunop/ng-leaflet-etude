@@ -13,12 +13,23 @@ export class CdpService {
   getOrganisms() {
     // return a GeoJSON observable
     return this.http
-      .get<any>("https://api.image2020genebank.eu/backend/organism.geojson/")
+      .get<any>("https://api.image2020genebank.eu/backend/organism.geojson/?page_size=1000")
       .pipe(
         map(data => {
-          console.log(data.next);
           return geoJSON(data);
         })
       )
   }
+
+  getSpecimens() {
+    // return a GeoJSON observable
+    return this.http
+      .get<any>("https://api.image2020genebank.eu/backend/specimen.geojson/?page_size=1000")
+      .pipe(
+        map(data => {
+          return geoJSON(data);
+        })
+      )
+  }
+
 }
