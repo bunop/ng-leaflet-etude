@@ -55,20 +55,15 @@ export class ImageGisSearchComponent implements OnInit {
     // get organisms data
     this.cdpService.getOrganisms().subscribe(organisms => {
       this.organisms = organisms;
-      // this.organisms.addTo(this.map);
       this.markerClusterGroup.addLayer(this.organisms);
-
-      this.layersControl.overlays['organisms'] = this.markerClusterGroup;
     });
 
     // get specimens data
     this.cdpService.getSpecimens().subscribe(specimens => {
       this.specimens = specimens;
-      // this.specimens.addTo(this.map);
       this.markerClusterGroup.addLayer(this.specimens);
 
-      this.layersControl.overlays['specimens'] = this.markerClusterGroup;
-
+      // zoom map on specimens
       this.map.fitBounds(this.specimens.getBounds(), {
         padding: L.point(24, 24),
         maxZoom: 12,
@@ -88,6 +83,7 @@ export class ImageGisSearchComponent implements OnInit {
   markerClusterReady(group: L.MarkerClusterGroup) {
     // Do stuff with group
     this.markerClusterGroup = group;
+    this.layersControl.overlays['cluster'] = this.markerClusterGroup;
   }
 
 }
