@@ -35,7 +35,7 @@ export class ImageGisSearchComponent implements OnInit {
     overlays: { }
   };
 
-  layers: any[] = [ this.streetMaps ];
+  layers = [ this.streetMaps ];
 
   // Set the initial set of displayed layers (we could also use the leafletLayers input binding for this)
   options = {
@@ -56,22 +56,18 @@ export class ImageGisSearchComponent implements OnInit {
     this.cdpService.getOrganisms().subscribe(organisms => {
       this.organisms = organisms;
       // this.organisms.addTo(this.map);
-      // this.map.addLayer(this.organisms);
-      this.layers.push(this.organisms);
       this.markerClusterGroup.addLayer(this.organisms);
 
-      this.layersControl.overlays['organisms'] = this.organisms;
+      this.layersControl.overlays['organisms'] = this.markerClusterGroup;
     });
 
     // get specimens data
     this.cdpService.getSpecimens().subscribe(specimens => {
       this.specimens = specimens;
       // this.specimens.addTo(this.map);
-      // this.map.addLayer(this.specimens);
-      this.layers.push(this.specimens);
       this.markerClusterGroup.addLayer(this.specimens);
 
-      this.layersControl.overlays['specimens'] = this.specimens;
+      this.layersControl.overlays['specimens'] = this.markerClusterGroup;
 
       this.map.fitBounds(this.specimens.getBounds(), {
         padding: L.point(24, 24),
@@ -92,15 +88,6 @@ export class ImageGisSearchComponent implements OnInit {
   markerClusterReady(group: L.MarkerClusterGroup) {
     // Do stuff with group
     this.markerClusterGroup = group;
-    this.layersControl.overlays['cluster'] = this.markerClusterGroup;
-  }
-
-  onLayerAdd(e) {
-    console.log(e);
-  }
-
-  onLayerRemove(e) {
-    console.log(e);
   }
 
 }

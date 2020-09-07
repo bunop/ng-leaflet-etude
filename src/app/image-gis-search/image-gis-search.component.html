@@ -2,11 +2,9 @@
   leaflet
   (leafletMapReady)="onMapReady($event)"
   [leafletOptions]="options"
+  [leafletLayers]="layers"
   [leafletLayersControl]="layersControl"
   [leafletMarkerCluster]="markerClusterData"
   [leafletMarkerClusterOptions]="markerClusterOptions"
   (leafletMarkerClusterReady)="markerClusterReady($event)">
-  <div>
-    <div *ngFor="let l of layers" [leafletLayer]="l" (leafletLayerAdd)="onLayerAdd($event)" (leafletLayerRemove)=onLayerRemove($event)></div>
-  </div>
 </div>
