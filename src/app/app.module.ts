@@ -16,6 +16,8 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { ImageGisSearchComponent } from './image-gis-search/image-gis-search.component';
+import { OrganismsComponent } from './image-gis-search/organisms/organisms.component';
+import { SpecimensComponent } from './image-gis-search/specimens/specimens.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { ImageGisSearchComponent } from './image-gis-search/image-gis-search.com
     HomeComponent,
     HeaderComponent,
     SidenavListComponent,
-    ImageGisSearchComponent
+    ImageGisSearchComponent,
+    OrganismsComponent,
+    SpecimensComponent
   ],
   imports: [
     BrowserModule,

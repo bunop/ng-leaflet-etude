@@ -9,14 +9,12 @@
   (leafletMarkerClusterReady)="markerClusterReady($event)">
 </div>
 
-<div *ngIf="!isFetchingOrganisms">
-  <div *ngFor="let organism of organisms_data">
-    <p>{{ organism.id }}</p>
-  </div>
-</div>
+<app-organisms
+  *ngIf="!isFetchingOrganisms"
+  [organisms]="organisms_data">
+</app-organisms>
 
-<div *ngIf="!isFetchingSpecimens">
-  <div *ngFor="let specimen of specimens_data">
-    <p>{{ specimen.id }}</p>
-  </div>
-</div>
+<app-specimens
+  *ngIf="!isFetchingSpecimens"
+  [specimens]="specimens_data">
+</app-specimens>
