@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+// need to import MaterialModule even here
+import { MaterialModule } from '../material/material.module';
+
 import { OrganismsComponent } from './organisms/organisms.component';
 import { SpecimensComponent } from './specimens/specimens.component';
 
@@ -10,7 +13,8 @@ import { SpecimensComponent } from './specimens/specimens.component';
     SpecimensComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MaterialModule,
   ],
   exports: [
     OrganismsComponent,
