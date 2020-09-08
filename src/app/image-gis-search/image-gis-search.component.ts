@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import "leaflet/dist/images/marker-shadow.png";
 
-import { CdpService } from './cdp.service';
+import { CdpService, GeoOrganism, GeoSpecimen } from './cdp.service';
 
 @Component({
   selector: 'app-image-gis-search',
@@ -12,9 +12,20 @@ import { CdpService } from './cdp.service';
   styleUrls: ['./image-gis-search.component.scss']
 })
 export class ImageGisSearchComponent implements OnInit {
-  organisms: L.GeoJSON;
-  specimens: L.GeoJSON;
+  // this will be my geojson layers
+  organisms_lyr: L.GeoJSON;
+  specimens_lyr: L.GeoJSON;
+
+  // this will be my leaflet map instance
   map: L.Map;
+
+  // here I will track data to visualize tables
+  organisms_data: GeoOrganism[];
+  specimens_data: GeoSpecimen[];
+
+  // two flags to determine if I'm waiting for data or not
+  isFetchingOrganisms = false;
+  isFetchingSpecimens = false;
 
   // Define our base layers so we can reference them multiple times
   streetMaps = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -52,19 +63,35 @@ export class ImageGisSearchComponent implements OnInit {
   constructor(private cdpService: CdpService) { }
 
   ngOnInit(): void {
+    // setting flag values
+    this.isFetchingOrganisms = true;
+    this.isFetchingSpecimens = true;
+
     // get organisms data
-    this.cdpService.getOrganisms().subscribe(organisms => {
-      this.organisms = organisms;
-      this.markerClusterGroup.addLayer(this.organisms);
+    this.cdpService.getOrganisms().subscribe(data => {
+      this.organisms_lyr = data.organisms_lyr;
+      this.organisms_data = data.organisms_data;
+
+      // add organisms layer to marker cluster group
+      this.markerClusterGroup.addLayer(this.organisms_lyr);
+
+      // set flag values
+      this.isFetchingOrganisms = false;
     });
 
     // get specimens data
-    this.cdpService.getSpecimens().subscribe(specimens => {
-      this.specimens = specimens;
-      this.markerClusterGroup.addLayer(this.specimens);
+    this.cdpService.getSpecimens().subscribe(data => {
+      this.specimens_lyr = data.specimens_lyr;
+      this.specimens_data = data.specimens_data;
+
+      // add organisms layer to marker cluster group
+      this.markerClusterGroup.addLayer(this.specimens_lyr);
+
+      // set flag values
+      this.isFetchingSpecimens = false;
 
       // zoom map on specimens
-      this.map.fitBounds(this.specimens.getBounds(), {
+      this.map.fitBounds(this.specimens_lyr.getBounds(), {
         padding: L.point(24, 24),
         maxZoom: 12,
         animate: true

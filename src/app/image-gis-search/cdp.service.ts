@@ -5,19 +5,35 @@ import { map } from 'rxjs/operators';
 import { geoJSON, LatLng, circleMarker } from 'leaflet';
 import { Feature } from 'geojson';
 
+export interface GeoOrganism extends Feature {
+  id?: string | number;
+  properties: {
+    species: string;
+    supplied_breed: string;
+    sex: string;
+  };
+}
+
+export interface GeoSpecimen extends Feature {
+  id?: string | number;
+  properties: {
+    species: string;
+    organism_part: string;
+    derived_from: string;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class CdpService {
   constructor(private http: HttpClient) { }
 
-  organismMarker(geoJsonPoint: Feature, latlng: LatLng) {
-    console.log(geoJsonPoint);
+  organismMarker(geoJsonPoint: GeoOrganism, latlng: LatLng) {
     return circleMarker(latlng, { color: 'deeppink', radius:10}).bindTooltip(`${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.supplied_breed}`);
   }
 
-  specimenMarker(geoJsonPoint: Feature, latlng: LatLng) {
-    console.log(geoJsonPoint);
+  specimenMarker(geoJsonPoint: GeoSpecimen, latlng: LatLng) {
     return circleMarker(latlng, { color: 'green', radius:10}).bindTooltip(`${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.organism_part}`);;
   }
 
@@ -27,7 +43,11 @@ export class CdpService {
       .get<any>("https://api.image2020genebank.eu/backend/organism.geojson/?page_size=1000")
       .pipe(
         map(data => {
-          return geoJSON(data, { pointToLayer: this.organismMarker });
+          const organisms: GeoOrganism[] = data.features;
+          return {
+            organisms_lyr: geoJSON(data, { pointToLayer: this.organismMarker }),
+            organisms_data: organisms
+          };
         })
       )
   }
@@ -38,7 +58,11 @@ export class CdpService {
       .get<any>("https://api.image2020genebank.eu/backend/specimen.geojson/?page_size=1000")
       .pipe(
         map(data => {
-          return geoJSON(data, { pointToLayer: this.specimenMarker });
+          const specimens: GeoSpecimen[] = data.features;
+          return {
+            specimens_lyr: geoJSON(data, { pointToLayer: this.specimenMarker }),
+            specimens_data: specimens
+          };
         })
       )
   }
