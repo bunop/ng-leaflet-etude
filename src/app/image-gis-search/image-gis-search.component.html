@@ -9,12 +9,18 @@
   (leafletMarkerClusterReady)="markerClusterReady($event)">
 </div>
 
+<br>
+
 <div class="">
   <app-organisms
     *ngIf="!isFetchingOrganisms"
     [organisms]="organisms_data">
   </app-organisms>
+</div>
 
+<br>
+
+<div class="">
   <app-specimens
     *ngIf="!isFetchingSpecimens"
     [specimens]="specimens_data">

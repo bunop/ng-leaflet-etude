@@ -9,17 +9,17 @@
 
   <ng-container matColumnDef="species">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Species </th>
-    <td mat-cell *matCellDef="let element"> {{ element.properties.species }} </td>
+    <td mat-cell *matCellDef="let element"> {{ element.species }} </td>
   </ng-container>
 
   <ng-container matColumnDef="organism_part">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Organisms Part </th>
-    <td mat-cell *matCellDef="let element"> {{ element.properties.organism_part }} </td>
+    <td mat-cell *matCellDef="let element"> {{ element.organism_part }} </td>
   </ng-container>
 
   <ng-container matColumnDef="derived_from">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Derived From </th>
-    <td mat-cell *matCellDef="let element"> {{ element.properties.derived_from }} </td>
+    <td mat-cell *matCellDef="let element"> {{ element.derived_from }} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
