@@ -15,9 +15,9 @@ import { AsymmetricTutorialComponent } from './asymmetric-tutorial/asymmetric-tu
 import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
+
 import { ImageGisSearchComponent } from './image-gis-search/image-gis-search.component';
-import { OrganismsComponent } from './image-gis-search/organisms/organisms.component';
-import { SpecimensComponent } from './image-gis-search/specimens/specimens.component';
+import { ImageGisSearchModule } from './image-gis-search/image-gis-search.module';
 
 @NgModule({
   declarations: [
@@ -27,9 +27,7 @@ import { SpecimensComponent } from './image-gis-search/specimens/specimens.compo
     HomeComponent,
     HeaderComponent,
     SidenavListComponent,
-    ImageGisSearchComponent,
-    OrganismsComponent,
-    SpecimensComponent
+    ImageGisSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +39,7 @@ import { SpecimensComponent } from './image-gis-search/specimens/specimens.compo
     HttpClientModule,
     LeafletModule,
     LeafletMarkerClusterModule,
+    ImageGisSearchModule
   ],
   providers: [],
   bootstrap: [AppComponent]
