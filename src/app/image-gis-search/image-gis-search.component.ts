@@ -27,6 +27,9 @@ export class ImageGisSearchComponent implements OnInit {
   isFetchingOrganisms = false;
   isFetchingSpecimens = false;
 
+  // for the accordion(?)
+  panelOpenState = false;
+
   // Define our base layers so we can reference them multiple times
   streetMaps = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     detectRetina: true,

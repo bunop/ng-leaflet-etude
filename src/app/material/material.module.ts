@@ -7,6 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const modules = [
   MatSidenavModule,
@@ -16,7 +17,8 @@ const modules = [
   MatListModule,
   MatTableModule,
   MatSortModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatExpansionModule
 ];
 
 @NgModule({
