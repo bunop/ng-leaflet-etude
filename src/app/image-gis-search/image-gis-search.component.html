@@ -11,13 +11,21 @@
 
     <div class="map"
       leaflet
+      leafletDraw
       (leafletMapReady)="onMapReady($event)"
       [leafletOptions]="options"
       [leafletLayers]="layers"
       [leafletLayersControl]="layersControl"
       [leafletMarkerCluster]="markerClusterData"
       [leafletMarkerClusterOptions]="markerClusterOptions"
-      (leafletMarkerClusterReady)="markerClusterReady($event)">
+      (leafletMarkerClusterReady)="markerClusterReady($event)"
+      [leafletDrawOptions]="drawOptions"
+      (leafletDrawCreated)="onDrawCreated($event)"
+      (leafletDrawStart)="onDrawStart($event)">
+
+        <!-- leaflet.draw layer -->
+        <div [leafletLayer]="drawnItems"></div>
+
     </div>
 
   </mat-expansion-panel>

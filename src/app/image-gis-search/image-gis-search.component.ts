@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
-import "leaflet/dist/images/marker-shadow.png";
+import 'leaflet/dist/images/marker-shadow.png';
 
 import { CdpService, GeoOrganism, GeoSpecimen } from './cdp.service';
 
@@ -19,6 +19,24 @@ export class ImageGisSearchComponent implements OnInit {
   // this will be my leaflet map instance
   map: L.Map;
 
+  // this will track drawn items with leaflet.draw
+  drawnItems: L.FeatureGroup = L.featureGroup();
+
+  drawOptions = {
+    position: 'bottomright',
+    draw: {
+      // disable those editing features
+      polygon : false,
+      polyline : false,
+      rectangle : false,
+      marker: false,
+      circlemarker: false
+    },
+    edit: {
+      featureGroup: this.drawnItems
+    }
+  };
+
   // here I will track data to visualize tables
   organisms_data: GeoOrganism[];
   specimens_data: GeoSpecimen[];
@@ -27,7 +45,7 @@ export class ImageGisSearchComponent implements OnInit {
   isFetchingOrganisms = false;
   isFetchingSpecimens = false;
 
-  // for the accordion(?)
+  // for the accordion(?), track the status of organism panel (example)
   panelOpenState = false;
 
   // Define our base layers so we can reference them multiple times
@@ -59,9 +77,9 @@ export class ImageGisSearchComponent implements OnInit {
   };
 
   // Marker cluster stuff
-	markerClusterGroup: L.MarkerClusterGroup;
+  markerClusterGroup: L.MarkerClusterGroup;
   markerClusterData: L.Marker[] = [];
-	markerClusterOptions: L.MarkerClusterGroupOptions;
+  markerClusterOptions: L.MarkerClusterGroupOptions;
 
   constructor(private cdpService: CdpService) { }
 
@@ -114,6 +132,20 @@ export class ImageGisSearchComponent implements OnInit {
     // Do stuff with group
     this.markerClusterGroup = group;
     this.layersControl.overlays['cluster'] = this.markerClusterGroup;
+  }
+
+  public onDrawCreated(e: L.DrawEvents.Created) {
+    const circleLayer = (e.layer as L.Circle);
+    this.drawnItems.addLayer(circleLayer);
+    console.log(circleLayer.getLatLng());
+    console.log(circleLayer.getRadius());
+  }
+
+  public onDrawStart(e: L.DrawEvents.DrawStart) {
+    // clear up items from drawn layer
+    this.drawnItems.clearLayers();
+    // tslint:disable-next-line:no-console
+    console.log('Draw Started Event!', e);
   }
 
 }
