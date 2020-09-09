@@ -21,7 +21,9 @@
       (leafletMarkerClusterReady)="markerClusterReady($event)"
       [leafletDrawOptions]="drawOptions"
       (leafletDrawCreated)="onDrawCreated($event)"
-      (leafletDrawStart)="onDrawStart($event)">
+      (leafletDrawStart)="onDrawStart($event)"
+      (leafletDrawDeleted)="onDrawDeleted($event)"
+      >
 
         <!-- leaflet.draw layer -->
         <div [leafletLayer]="drawnItems"></div>

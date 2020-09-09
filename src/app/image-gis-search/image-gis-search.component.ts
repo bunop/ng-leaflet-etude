@@ -84,40 +84,7 @@ export class ImageGisSearchComponent implements OnInit {
   constructor(private cdpService: CdpService) { }
 
   ngOnInit(): void {
-    // setting flag values
-    this.isFetchingOrganisms = true;
-    this.isFetchingSpecimens = true;
-
-    // get organisms data
-    this.cdpService.getOrganisms().subscribe(data => {
-      this.organisms_lyr = data.organisms_lyr;
-      this.organisms_data = data.organisms_data;
-
-      // add organisms layer to marker cluster group
-      this.markerClusterGroup.addLayer(this.organisms_lyr);
-
-      // set flag values
-      this.isFetchingOrganisms = false;
-    });
-
-    // get specimens data
-    this.cdpService.getSpecimens().subscribe(data => {
-      this.specimens_lyr = data.specimens_lyr;
-      this.specimens_data = data.specimens_data;
-
-      // add organisms layer to marker cluster group
-      this.markerClusterGroup.addLayer(this.specimens_lyr);
-
-      // set flag values
-      this.isFetchingSpecimens = false;
-
-      // zoom map on specimens
-      this.map.fitBounds(this.specimens_lyr.getBounds(), {
-        padding: L.point(24, 24),
-        maxZoom: 12,
-        animate: true
-      });
-    });
+    this.initializeData();
   }
 
   onMapReady(map: L.Map) {
@@ -150,37 +117,19 @@ export class ImageGisSearchComponent implements OnInit {
     this.isFetchingOrganisms = true;
     this.isFetchingSpecimens = true;
 
-    // erase markercluster layers
-    this.markerClusterGroup.clearLayers();
-
-    // remove organisms_lyr and specimens_lyr
-    this.organisms_lyr.clearLayers();
-    this.specimens_lyr.clearLayers();
+    // erase all data selected on map
+    this.clearData();
 
     // get organisms data
     this.cdpService.getOrganisms(lat, lng, rad).subscribe(data => {
-      // get new data
-      this.organisms_lyr = data.organisms_lyr;
-      this.organisms_data = data.organisms_data;
-
-      // add organisms layer to marker cluster group
-      this.markerClusterGroup.addLayer(this.organisms_lyr);
-
-      // set flag values
-      this.isFetchingOrganisms = false;
+      // deal with organism data
+      this.readOrganisms(data);
     });
 
     // get specimens data
     this.cdpService.getSpecimens(lat, lng, rad).subscribe(data => {
-      // get new data
-      this.specimens_lyr = data.specimens_lyr;
-      this.specimens_data = data.specimens_data;
-
-      // add organisms layer to marker cluster group
-      this.markerClusterGroup.addLayer(this.specimens_lyr);
-
-      // set flag values
-      this.isFetchingSpecimens = false;
+      // deal with specimen data
+      this.readSpecimens(data);
     });
   }
 
@@ -189,6 +138,72 @@ export class ImageGisSearchComponent implements OnInit {
     this.drawnItems.clearLayers();
     // tslint:disable-next-line:no-console
     console.log('Draw Started Event!', e);
+  }
+
+  public onDrawDeleted(_e: L.DrawEvents.Deleted) {
+    console.log("deleted event!!", _e);
+
+    // erase all data selected on map
+    this.clearData();
+
+    // read all data again
+    this.initializeData();
+  }
+
+  readOrganisms(data: { organisms_lyr: L.GeoJSON, organisms_data: GeoOrganism[]}) {
+    this.organisms_lyr = data.organisms_lyr;
+    this.organisms_data = data.organisms_data;
+
+    // add organisms layer to marker cluster group
+    this.markerClusterGroup.addLayer(this.organisms_lyr);
+
+    // set flag values
+    this.isFetchingOrganisms = false;
+  }
+
+  readSpecimens(data: { specimens_lyr: L.GeoJSON, specimens_data: GeoSpecimen[]}) {
+    this.specimens_lyr = data.specimens_lyr;
+    this.specimens_data = data.specimens_data;
+
+    // add organisms layer to marker cluster group
+    this.markerClusterGroup.addLayer(this.specimens_lyr);
+
+    // set flag values
+    this.isFetchingSpecimens = false;
+  }
+
+  initializeData() {
+    // setting flag values
+    this.isFetchingOrganisms = true;
+    this.isFetchingSpecimens = true;
+
+    // get organisms data
+    this.cdpService.getOrganisms().subscribe(data => {
+      // deal with organism data
+      this.readOrganisms(data);
+    });
+
+    // get specimens data
+    this.cdpService.getSpecimens().subscribe(data => {
+      // deal with specimen data
+      this.readSpecimens(data);
+
+      // zoom map on specimens
+      this.map.fitBounds(this.specimens_lyr.getBounds(), {
+        padding: L.point(24, 24),
+        maxZoom: 12,
+        animate: true
+      });
+    });
+  }
+
+  clearData() {
+    // erase markercluster layers
+    this.markerClusterGroup.clearLayers();
+
+    // remove organisms_lyr and specimens_lyr
+    this.organisms_lyr.clearLayers();
+    this.specimens_lyr.clearLayers();
   }
 
 }
