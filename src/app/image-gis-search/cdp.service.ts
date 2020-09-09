@@ -37,10 +37,20 @@ export class CdpService {
     return circleMarker(latlng, { color: 'green', radius:10}).bindTooltip(`${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.organism_part}`);;
   }
 
-  getOrganisms() {
+  getOrganisms(lat?: number, lng?: number, rad?: number) {
+    let url = "https://api.image2020genebank.eu/backend/organism.geojson/?page_size=1000"
+
+    // console.log([lat, lng, rad]);
+
+    if (lat && lng && rad) {
+      url += `&lat=${lat}&lng=${lng}&rad=${rad}`;
+    }
+
+    // console.log(url);
+
     // return a GeoJSON observable
     return this.http
-      .get<any>("https://api.image2020genebank.eu/backend/organism.geojson/?page_size=1000")
+      .get<any>(url)
       .pipe(
         map(data => {
           const organisms: GeoOrganism[] = data.features;
@@ -52,10 +62,18 @@ export class CdpService {
       )
   }
 
-  getSpecimens() {
+  getSpecimens(lat?: number, lng?: number, rad?: number) {
+    let url = "https://api.image2020genebank.eu/backend/specimen.geojson/?page_size=1000"
+
+    if (lat && lng && rad) {
+      url += `&lat=${lat}&lng=${lng}&rad=${rad}`;
+    }
+
+    // console.log(url);
+
     // return a GeoJSON observable
     return this.http
-      .get<any>("https://api.image2020genebank.eu/backend/specimen.geojson/?page_size=1000")
+      .get<any>(url)
       .pipe(
         map(data => {
           const specimens: GeoSpecimen[] = data.features;

@@ -137,8 +137,51 @@ export class ImageGisSearchComponent implements OnInit {
   public onDrawCreated(e: L.DrawEvents.Created) {
     const circleLayer = (e.layer as L.Circle);
     this.drawnItems.addLayer(circleLayer);
-    console.log(circleLayer.getLatLng());
-    console.log(circleLayer.getRadius());
+
+    // create a custom query
+    const point = circleLayer.getLatLng();
+    const lat = point.lat;
+    const lng = point.lng;
+    const rad = Math.round(circleLayer.getRadius() / 1000); // get radius in Km
+
+    // console.log([lat, lng, rad]);
+
+    // do another query. Setting flag values
+    this.isFetchingOrganisms = true;
+    this.isFetchingSpecimens = true;
+
+    // erase markercluster layers
+    this.markerClusterGroup.clearLayers();
+
+    // remove organisms_lyr and specimens_lyr
+    this.organisms_lyr.clearLayers();
+    this.specimens_lyr.clearLayers();
+
+    // get organisms data
+    this.cdpService.getOrganisms(lat, lng, rad).subscribe(data => {
+      // get new data
+      this.organisms_lyr = data.organisms_lyr;
+      this.organisms_data = data.organisms_data;
+
+      // add organisms layer to marker cluster group
+      this.markerClusterGroup.addLayer(this.organisms_lyr);
+
+      // set flag values
+      this.isFetchingOrganisms = false;
+    });
+
+    // get specimens data
+    this.cdpService.getSpecimens(lat, lng, rad).subscribe(data => {
+      // get new data
+      this.specimens_lyr = data.specimens_lyr;
+      this.specimens_data = data.specimens_data;
+
+      // add organisms layer to marker cluster group
+      this.markerClusterGroup.addLayer(this.specimens_lyr);
+
+      // set flag values
+      this.isFetchingSpecimens = false;
+    });
   }
 
   public onDrawStart(e: L.DrawEvents.DrawStart) {
