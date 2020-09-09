@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet/dist/images/marker-shadow.png';
+import 'leaflet-draw';
 
 import { CdpService, GeoOrganism, GeoSpecimen } from './cdp.service';
 

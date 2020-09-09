@@ -1,5 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
+import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
+
+import { MaterialModule } from '../material/material.module';
 import { ImageGisSearchComponent } from './image-gis-search.component';
 
 describe('ImageGisSearchComponent', () => {
@@ -8,7 +15,15 @@ describe('ImageGisSearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImageGisSearchComponent ]
+      declarations: [ ImageGisSearchComponent ],
+      imports: [
+        BrowserAnimationsModule,
+        HttpClientModule,
+        MaterialModule,
+        LeafletModule,
+        LeafletMarkerClusterModule,
+        LeafletDrawModule,
+      ]
     })
     .compileComponents();
   }));
