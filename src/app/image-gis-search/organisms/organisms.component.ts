@@ -21,7 +21,7 @@ interface Organism {
 export class OrganismsComponent implements OnInit, AfterViewInit {
   // I will receive this data using property binding from the component which is
   // calling this component. organisms is the name of the property binding element
-  @Input('organisms') geo_organisms: GeoOrganism[];
+  @Input() geoOrganisms: GeoOrganism[];
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -32,16 +32,16 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
   constructor() { }
 
   ngOnInit(): void {
-    let organisms: Organism[] = [];
+    const organisms: Organism[] = [];
 
     // I need to flatten GeoOrganism objects in order to sort tables properly with
     // default MatSort functions
-    for (let geo_organism of this.geo_organisms) {
+    for (const geoOrganism of this.geoOrganisms) {
       organisms.push({
-        id: geo_organism.id,
-        species: geo_organism.properties.species,
-        supplied_breed: geo_organism.properties.supplied_breed,
-        sex: geo_organism.properties.sex
+        id: geoOrganism.id,
+        species: geoOrganism.properties.species,
+        supplied_breed: geoOrganism.properties.supplied_breed,
+        sex: geoOrganism.properties.sex
       });
     }
 

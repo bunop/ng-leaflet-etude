@@ -13,8 +13,8 @@ import { CdpService, GeoOrganism, GeoSpecimen } from './cdp.service';
 })
 export class ImageGisSearchComponent implements OnInit {
   // this will be my geojson layers
-  organisms_lyr: L.GeoJSON;
-  specimens_lyr: L.GeoJSON;
+  organismsLyr: L.GeoJSON;
+  specimensLyr: L.GeoJSON;
 
   // this will be my leaflet map instance
   map: L.Map;
@@ -38,8 +38,8 @@ export class ImageGisSearchComponent implements OnInit {
   };
 
   // here I will track data to visualize tables
-  organisms_data: GeoOrganism[];
-  specimens_data: GeoSpecimen[];
+  organismsData: GeoOrganism[];
+  specimensData: GeoSpecimen[];
 
   // two flags to determine if I'm waiting for data or not
   isFetchingOrganisms = false;
@@ -90,7 +90,7 @@ export class ImageGisSearchComponent implements OnInit {
   onMapReady(map: L.Map) {
     this.map = map;
 
-    this.map.on("click", e => {
+    this.map.on('click', e => {
       console.log(e);
     });
   }
@@ -98,7 +98,9 @@ export class ImageGisSearchComponent implements OnInit {
   markerClusterReady(group: L.MarkerClusterGroup) {
     // Do stuff with group
     this.markerClusterGroup = group;
-    this.layersControl.overlays['cluster'] = this.markerClusterGroup;
+
+    const key = 'cluster';
+    this.layersControl.overlays[key] = this.markerClusterGroup;
   }
 
   public onDrawCreated(e: L.DrawEvents.Created) {
@@ -140,8 +142,8 @@ export class ImageGisSearchComponent implements OnInit {
     console.log('Draw Started Event!', e);
   }
 
-  public onDrawDeleted(_e: L.DrawEvents.Deleted) {
-    console.log("deleted event!!", _e);
+  public onDrawDeleted(e: L.DrawEvents.Deleted) {
+    console.log('deleted event!!', e);
 
     // erase all data selected on map
     this.clearData();
@@ -150,23 +152,23 @@ export class ImageGisSearchComponent implements OnInit {
     this.initializeData();
   }
 
-  readOrganisms(data: { organisms_lyr: L.GeoJSON, organisms_data: GeoOrganism[]}) {
-    this.organisms_lyr = data.organisms_lyr;
-    this.organisms_data = data.organisms_data;
+  readOrganisms(data: { organismsLyr: L.GeoJSON, organismsData: GeoOrganism[]}) {
+    this.organismsLyr = data.organismsLyr;
+    this.organismsData = data.organismsData;
 
     // add organisms layer to marker cluster group
-    this.markerClusterGroup.addLayer(this.organisms_lyr);
+    this.markerClusterGroup.addLayer(this.organismsLyr);
 
     // set flag values
     this.isFetchingOrganisms = false;
   }
 
-  readSpecimens(data: { specimens_lyr: L.GeoJSON, specimens_data: GeoSpecimen[]}) {
-    this.specimens_lyr = data.specimens_lyr;
-    this.specimens_data = data.specimens_data;
+  readSpecimens(data: { specimensLyr: L.GeoJSON, specimensData: GeoSpecimen[]}) {
+    this.specimensLyr = data.specimensLyr;
+    this.specimensData = data.specimensData;
 
     // add organisms layer to marker cluster group
-    this.markerClusterGroup.addLayer(this.specimens_lyr);
+    this.markerClusterGroup.addLayer(this.specimensLyr);
 
     // set flag values
     this.isFetchingSpecimens = false;
@@ -189,7 +191,7 @@ export class ImageGisSearchComponent implements OnInit {
       this.readSpecimens(data);
 
       // zoom map on specimens
-      this.map.fitBounds(this.specimens_lyr.getBounds(), {
+      this.map.fitBounds(this.specimensLyr.getBounds(), {
         padding: L.point(24, 24),
         maxZoom: 12,
         animate: true
@@ -201,9 +203,9 @@ export class ImageGisSearchComponent implements OnInit {
     // erase markercluster layers
     this.markerClusterGroup.clearLayers();
 
-    // remove organisms_lyr and specimens_lyr
-    this.organisms_lyr.clearLayers();
-    this.specimens_lyr.clearLayers();
+    // remove organismsLyr and specimensLyr
+    this.organismsLyr.clearLayers();
+    this.specimensLyr.clearLayers();
   }
 
 }

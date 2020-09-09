@@ -30,15 +30,15 @@ export class CdpService {
   constructor(private http: HttpClient) { }
 
   organismMarker(geoJsonPoint: GeoOrganism, latlng: LatLng) {
-    return circleMarker(latlng, { color: 'deeppink', radius:10}).bindTooltip(`${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.supplied_breed}`);
+    return circleMarker(latlng, { color: 'deeppink', radius: 10 }).bindTooltip(`${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.supplied_breed}`);
   }
 
   specimenMarker(geoJsonPoint: GeoSpecimen, latlng: LatLng) {
-    return circleMarker(latlng, { color: 'green', radius:10}).bindTooltip(`${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.organism_part}`);;
+    return circleMarker(latlng, { color: 'green', radius: 10 }).bindTooltip(`${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.organism_part}`);
   }
 
   getOrganisms(lat?: number, lng?: number, rad?: number) {
-    let url = "https://api.image2020genebank.eu/backend/organism.geojson/?page_size=1000"
+    let url = 'https://api.image2020genebank.eu/backend/organism.geojson/?page_size=1000';
 
     // console.log([lat, lng, rad]);
 
@@ -55,15 +55,15 @@ export class CdpService {
         map(data => {
           const organisms: GeoOrganism[] = data.features;
           return {
-            organisms_lyr: geoJSON(data, { pointToLayer: this.organismMarker }),
-            organisms_data: organisms
+            organismsLyr: geoJSON(data, { pointToLayer: this.organismMarker }),
+            organismsData: organisms
           };
         })
-      )
+      );
   }
 
   getSpecimens(lat?: number, lng?: number, rad?: number) {
-    let url = "https://api.image2020genebank.eu/backend/specimen.geojson/?page_size=1000"
+    let url = 'https://api.image2020genebank.eu/backend/specimen.geojson/?page_size=1000';
 
     if (lat && lng && rad) {
       url += `&lat=${lat}&lng=${lng}&rad=${rad}`;
@@ -78,11 +78,11 @@ export class CdpService {
         map(data => {
           const specimens: GeoSpecimen[] = data.features;
           return {
-            specimens_lyr: geoJSON(data, { pointToLayer: this.specimenMarker }),
-            specimens_data: specimens
+            specimensLyr: geoJSON(data, { pointToLayer: this.specimenMarker }),
+            specimensData: specimens
           };
         })
-      )
+      );
   }
 
 }

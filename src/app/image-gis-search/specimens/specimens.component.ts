@@ -21,7 +21,7 @@ interface Specimen {
 export class SpecimensComponent implements OnInit, AfterViewInit {
   // I will receive this data using property binding from the component which is
   // calling this component
-  @Input('specimens') geo_specimens: GeoSpecimen[];
+  @Input() geoSpecimens: GeoSpecimen[];
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -32,14 +32,14 @@ export class SpecimensComponent implements OnInit, AfterViewInit {
   constructor() { }
 
   ngOnInit(): void {
-    let specimens: Specimen[] = [];
-    
-    for (let geo_specimen of this.geo_specimens) {
+    const specimens: Specimen[] = [];
+
+    for (const geoSpecimen of this.geoSpecimens) {
       specimens.push({
-        id: geo_specimen.id,
-        species: geo_specimen.properties.species,
-        organism_part: geo_specimen.properties.organism_part,
-        derived_from: geo_specimen.properties.derived_from
+        id: geoSpecimen.id,
+        species: geoSpecimen.properties.species,
+        organism_part: geoSpecimen.properties.organism_part,
+        derived_from: geoSpecimen.properties.derived_from
       });
     }
 
