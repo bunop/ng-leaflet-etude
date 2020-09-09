@@ -4,7 +4,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { LeafletMarkerClusterModule } from "@asymmetrik/ngx-leaflet-markercluster";
+import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
+import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,6 +40,7 @@ import { ImageGisSearchModule } from './image-gis-search/image-gis-search.module
     HttpClientModule,
     LeafletModule,
     LeafletMarkerClusterModule,
+    LeafletDrawModule,
     ImageGisSearchModule
   ],
   providers: [],
