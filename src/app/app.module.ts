@@ -1,8 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
+import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +17,9 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 
+import { ImageGisSearchComponent } from './image-gis-search/image-gis-search.component';
+import { ImageGisSearchModule } from './image-gis-search/image-gis-search.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +27,8 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
     AsymmetricTutorialComponent,
     HomeComponent,
     HeaderComponent,
-    SidenavListComponent
+    SidenavListComponent,
+    ImageGisSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +36,12 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
     BrowserAnimationsModule,
     MaterialModule,
     FlexLayoutModule,
+    // import HttpClientModule after BrowserModule.
+    HttpClientModule,
     LeafletModule,
+    LeafletMarkerClusterModule,
+    LeafletDrawModule,
+    ImageGisSearchModule
   ],
   providers: [],
   bootstrap: [AppComponent]

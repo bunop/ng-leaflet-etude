@@ -1,0 +1,66 @@
+
+<mat-accordion [multi]="true">
+
+  <mat-expansion-panel [expanded]="true">
+
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        GIS-based search
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="map"
+      leaflet
+      leafletDraw
+      (leafletMapReady)="onMapReady($event)"
+      [leafletOptions]="options"
+      [leafletLayers]="layers"
+      [leafletLayersControl]="layersControl"
+      [leafletMarkerCluster]="markerClusterData"
+      [leafletMarkerClusterOptions]="markerClusterOptions"
+      (leafletMarkerClusterReady)="markerClusterReady($event)"
+      [leafletDrawOptions]="drawOptions"
+      (leafletDrawCreated)="onDrawCreated($event)"
+      (leafletDrawStart)="onDrawStart($event)"
+      (leafletDrawDeleted)="onDrawDeleted($event)"
+      >
+
+        <!-- leaflet.draw layer -->
+        <div [leafletLayer]="drawnItems"></div>
+
+    </div>
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        List of Organisms
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <app-organisms
+      *ngIf="!isFetchingOrganisms"
+      [geoOrganisms]="organismsData">
+    </app-organisms>
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="panelOpenState = true"
+                       (closed)="panelOpenState = false">
+
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        List of Specimens
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <app-specimens
+      *ngIf="!isFetchingSpecimens"
+      [geoSpecimens]="specimensData">
+    </app-specimens>
+
+  </mat-expansion-panel>
+
+</mat-accordion>
