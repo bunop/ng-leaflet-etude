@@ -26,7 +26,7 @@ export class SpecimensComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public displayedColumns = ['id', 'species', 'organism_part', 'derived_from'];
+  public displayedColumns = ['id', 'species', 'organism_part', 'derived_from', 'show_on_map', 'details'];
   public dataSource = new MatTableDataSource<Specimen>();
 
   constructor() { }
@@ -57,6 +57,11 @@ export class SpecimensComponent implements OnInit, AfterViewInit {
 
   public customSort = (event: object) => {
     console.log(event);
+  }
+
+  showOnMap(id: string | number) {
+    const geoSpecimen = this.geoSpecimens.find(item => item.id === id);
+    console.log(geoSpecimen);
   }
 
 }

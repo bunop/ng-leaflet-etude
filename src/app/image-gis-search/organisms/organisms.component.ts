@@ -26,7 +26,7 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public displayedColumns = ['id', 'species', 'supplied_breed', 'sex'];
+  public displayedColumns = ['id', 'species', 'supplied_breed', 'sex', 'show_on_map', 'details'];
   public dataSource = new MatTableDataSource<Organism>();
 
   constructor() { }
@@ -59,6 +59,11 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
 
   public customSort = (event: object) => {
     console.log(event);
+  }
+
+  showOnMap(id: string | number) {
+    const geoOrganism = this.geoOrganisms.find(item => item.id === id);
+    console.log(geoOrganism);
   }
 
 }
