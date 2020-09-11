@@ -4,3 +4,8 @@
   padding: 0;
   outline: 1px solid black;
 }
+
+mat-expansion-panel {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
