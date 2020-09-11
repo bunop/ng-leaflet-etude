@@ -23,6 +23,14 @@ export interface GeoSpecimen extends Feature {
   };
 }
 
+export function organismDescription(geoJsonPoint: GeoOrganism) {
+  return `${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.supplied_breed}`;
+}
+
+export function specimenDescription(geoJsonPoint: GeoSpecimen) {
+  return `${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.organism_part}`;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -30,11 +38,11 @@ export class CdpService {
   constructor(private http: HttpClient) { }
 
   organismMarker(geoJsonPoint: GeoOrganism, latlng: LatLng) {
-    return circleMarker(latlng, { color: 'deeppink', radius: 10 }).bindTooltip(`${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.supplied_breed}`);
+    return circleMarker(latlng, { color: 'deeppink', radius: 10 }).bindTooltip(organismDescription(geoJsonPoint));
   }
 
   specimenMarker(geoJsonPoint: GeoSpecimen, latlng: LatLng) {
-    return circleMarker(latlng, { color: 'green', radius: 10 }).bindTooltip(`${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.organism_part}`);
+    return circleMarker(latlng, { color: 'green', radius: 10 }).bindTooltip(specimenDescription(geoJsonPoint));
   }
 
   getOrganisms(lat?: number, lng?: number, rad?: number) {

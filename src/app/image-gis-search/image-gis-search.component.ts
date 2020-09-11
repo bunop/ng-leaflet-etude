@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Feature } from 'geojson';
+
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet-draw';
 
-import { CdpService, GeoOrganism, GeoSpecimen } from './cdp.service';
+import { CdpService, GeoOrganism, GeoSpecimen, organismDescription, specimenDescription } from './cdp.service';
 
 @Component({
   selector: 'app-image-gis-search',
@@ -16,6 +18,9 @@ export class ImageGisSearchComponent implements OnInit {
   // this will be my geojson layers
   organismsLyr: L.GeoJSON;
   specimensLyr: L.GeoJSON;
+
+  // this will be my selected layer
+  selectedItem: L.GeoJSON;
 
   // this will be my leaflet map instance
   map: L.Map;
@@ -100,7 +105,7 @@ export class ImageGisSearchComponent implements OnInit {
     // Do stuff with group
     this.markerClusterGroup = group;
 
-    const key = 'cluster';
+    const key = 'IMAGE samples';
     this.layersControl.overlays[key] = this.markerClusterGroup;
   }
 
@@ -210,11 +215,32 @@ export class ImageGisSearchComponent implements OnInit {
   }
 
   onSelectedOrganism(geoOrganism: GeoOrganism) {
-    console.log(geoOrganism);
+    // console.log(geoOrganism);
+    this.addSelected(geoOrganism);
+    this.selectedItem.bindTooltip(organismDescription(geoOrganism));
   }
 
-  onSelectedSpecimen(geoSpecimen: GeoOrganism) {
-    console.log(geoSpecimen);
+  onSelectedSpecimen(geoSpecimen: GeoSpecimen) {
+    // console.log(geoSpecimen);
+    this.addSelected(geoSpecimen);
+    this.selectedItem.bindTooltip(specimenDescription(geoSpecimen));
+  }
+
+  private addSelected(feature: Feature) {
+    // the layer key
+    const key = 'Selected item';
+
+    // test if there is already a selected item
+    if (key in this.layersControl.overlays) {
+      // remove selected item
+      this.selectedItem.clearLayers();
+    }
+
+    // read received GeoJSON object
+    this.selectedItem = L.geoJSON(feature);
+    this.map.addLayer(this.selectedItem);
+
+    this.layersControl.overlays[key] = this.selectedItem;
   }
 
 }
