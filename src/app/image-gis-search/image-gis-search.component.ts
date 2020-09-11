@@ -209,4 +209,12 @@ export class ImageGisSearchComponent implements OnInit {
     this.specimensLyr.clearLayers();
   }
 
+  onSelectedOrganism(geoOrganism: GeoOrganism) {
+    console.log(geoOrganism);
+  }
+
+  onSelectedSpecimen(geoSpecimen: GeoOrganism) {
+    console.log(geoSpecimen);
+  }
+
 }

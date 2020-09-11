@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -22,6 +22,9 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
   // I will receive this data using property binding from the component which is
   // calling this component. organisms is the name of the property binding element
   @Input() geoOrganisms: GeoOrganism[];
+
+  // this will be the selected item that I want to display on map
+  @Output() selectedOrganism = new EventEmitter<GeoOrganism>();
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -63,7 +66,9 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
 
   showOnMap(id: string | number) {
     const geoOrganism = this.geoOrganisms.find(item => item.id === id);
-    console.log(geoOrganism);
+
+    // pass selected organism like an event
+    this.selectedOrganism.emit(geoOrganism);
   }
 
 }

@@ -42,7 +42,8 @@
 
     <app-organisms
       *ngIf="!isFetchingOrganisms"
-      [geoOrganisms]="organismsData">
+      [geoOrganisms]="organismsData"
+      (selectedOrganism)="onSelectedOrganism($event)">
     </app-organisms>
 
   </mat-expansion-panel>
@@ -58,7 +59,8 @@
 
     <app-specimens
       *ngIf="!isFetchingSpecimens"
-      [geoSpecimens]="specimensData">
+      [geoSpecimens]="specimensData"
+      (selectedSpecimen)="onSelectedSpecimen($event)">
     </app-specimens>
 
   </mat-expansion-panel>
