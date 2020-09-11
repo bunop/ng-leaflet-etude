@@ -16,7 +16,7 @@ interface Specimen {
 @Component({
   selector: 'app-specimens',
   templateUrl: './specimens.component.html',
-  styleUrls: ['./specimens.component.css']
+  styleUrls: ['./specimens.component.scss']
 })
 export class SpecimensComponent implements OnInit, AfterViewInit {
   // I will receive this data using property binding from the component which is
