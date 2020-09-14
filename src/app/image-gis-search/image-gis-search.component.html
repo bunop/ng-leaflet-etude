@@ -1,23 +1,29 @@
 
-<div class="map"
-  leaflet
-  leafletDraw
-  (leafletMapReady)="onMapReady($event)"
-  [leafletOptions]="options"
-  [leafletLayers]="layers"
-  [leafletLayersControl]="layersControl"
-  [leafletMarkerCluster]="markerClusterData"
-  [leafletMarkerClusterOptions]="markerClusterOptions"
-  (leafletMarkerClusterReady)="markerClusterReady($event)"
-  [leafletDrawOptions]="drawOptions"
-  (leafletDrawCreated)="onDrawCreated($event)"
-  (leafletDrawStart)="onDrawStart($event)"
-  (leafletDrawDeleted)="onDrawDeleted($event)">
+<mat-sidenav-container>
+  <mat-sidenav mode="side" position="end" #sideNav>Sidenav content</mat-sidenav>
+  <mat-sidenav-content>
+    <div class="map"
+    leaflet
+    leafletDraw
+    (leafletMapReady)="onMapReady($event)"
+    [leafletOptions]="options"
+    [leafletLayers]="layers"
+    [leafletLayersControl]="layersControl"
+    [leafletMarkerCluster]="markerClusterData"
+    [leafletMarkerClusterOptions]="markerClusterOptions"
+    (leafletMarkerClusterReady)="markerClusterReady($event)"
+    [leafletDrawOptions]="drawOptions"
+    (leafletDrawCreated)="onDrawCreated($event)"
+    (leafletDrawStart)="onDrawStart($event)"
+    (leafletDrawDeleted)="onDrawDeleted($event)">
 
-    <!-- leaflet.draw layer -->
-    <div [leafletLayer]="drawnItems"></div>
+      <!-- leaflet.draw layer -->
+      <div [leafletLayer]="drawnItems"></div>
 
-</div>
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
 <br>
 

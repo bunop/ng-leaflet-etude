@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 
 import { Feature } from 'geojson';
 
@@ -6,6 +7,7 @@ import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet-draw';
+import 'leaflet-easybutton';
 
 import { CdpService, GeoOrganism, GeoSpecimen, organismDescription, specimenDescription } from './cdp.service';
 
@@ -15,6 +17,10 @@ import { CdpService, GeoOrganism, GeoSpecimen, organismDescription, specimenDesc
   styleUrls: ['./image-gis-search.component.scss']
 })
 export class ImageGisSearchComponent implements OnInit {
+  // this will listen for the sideNav local reference on html template. I can
+  // manage the mat-sidenav using this property
+  @ViewChild('sideNav', {static: true}) public sideNav: MatSidenav;
+
   // this will be my geojson layers
   organismsLyr: L.GeoJSON;
   specimensLyr: L.GeoJSON;
@@ -95,6 +101,17 @@ export class ImageGisSearchComponent implements OnInit {
 
   onMapReady(map: L.Map) {
     this.map = map;
+
+    // defining the custombuttom here and assigning it to my map after it is ready
+    // is the only way to toggle the material sidenav using leaflet.easybutton
+    const customButton = L.easyButton(
+      '<i style="font-size:18px;" class="material-icons">search</i>',
+      () => {
+        this.sideNav.toggle();
+      }
+    );
+
+    customButton.addTo(this.map);
 
     this.map.on('click', e => {
       console.log(e);
@@ -215,6 +232,7 @@ export class ImageGisSearchComponent implements OnInit {
   }
 
   onSelectedOrganism(geoOrganism: GeoOrganism) {
+    this.sideNav.toggle();
     // console.log(geoOrganism);
     this.addSelected(geoOrganism);
     this.selectedItem.bindTooltip(organismDescription(geoOrganism));
