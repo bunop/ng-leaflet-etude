@@ -1,36 +1,27 @@
 
+<div class="map"
+  leaflet
+  leafletDraw
+  (leafletMapReady)="onMapReady($event)"
+  [leafletOptions]="options"
+  [leafletLayers]="layers"
+  [leafletLayersControl]="layersControl"
+  [leafletMarkerCluster]="markerClusterData"
+  [leafletMarkerClusterOptions]="markerClusterOptions"
+  (leafletMarkerClusterReady)="markerClusterReady($event)"
+  [leafletDrawOptions]="drawOptions"
+  (leafletDrawCreated)="onDrawCreated($event)"
+  (leafletDrawStart)="onDrawStart($event)"
+  (leafletDrawDeleted)="onDrawDeleted($event)">
+
+    <!-- leaflet.draw layer -->
+    <div [leafletLayer]="drawnItems"></div>
+
+</div>
+
+<br>
+
 <mat-accordion [multi]="true">
-
-  <mat-expansion-panel [expanded]="true">
-
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        GIS-based search
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-
-    <div class="map"
-      leaflet
-      leafletDraw
-      (leafletMapReady)="onMapReady($event)"
-      [leafletOptions]="options"
-      [leafletLayers]="layers"
-      [leafletLayersControl]="layersControl"
-      [leafletMarkerCluster]="markerClusterData"
-      [leafletMarkerClusterOptions]="markerClusterOptions"
-      (leafletMarkerClusterReady)="markerClusterReady($event)"
-      [leafletDrawOptions]="drawOptions"
-      (leafletDrawCreated)="onDrawCreated($event)"
-      (leafletDrawStart)="onDrawStart($event)"
-      (leafletDrawDeleted)="onDrawDeleted($event)"
-      >
-
-        <!-- leaflet.draw layer -->
-        <div [leafletLayer]="drawnItems"></div>
-
-    </div>
-
-  </mat-expansion-panel>
 
   <mat-expansion-panel>
 
