@@ -246,7 +246,6 @@ export class ImageGisSearchComponent implements OnInit {
   }
 
   onSelectedOrganism(geoOrganism: GeoOrganism) {
-    this.sideNav.toggle();
     // console.log(geoOrganism);
     this.addSelected(geoOrganism);
     this.selectedItem.bindTooltip(organismDescription(geoOrganism));
