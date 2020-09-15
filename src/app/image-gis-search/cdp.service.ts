@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-import { geoJSON, LatLng, circleMarker } from 'leaflet';
+import { geoJSON, LatLng, circleMarker, GeoJSON } from 'leaflet';
 import { Feature } from 'geojson';
 
 export interface GeoOrganism extends Feature {
@@ -21,6 +21,13 @@ export interface GeoSpecimen extends Feature {
     organism_part: string;
     derived_from: string;
   };
+}
+
+export interface OrganismsResponse {
+  organismsLyr: GeoJSON;
+  organismsData: GeoOrganism[];
+  uniqueSpecies: string[];
+  uniqueBreeds: string[];
 }
 
 export function organismDescription(geoJsonPoint: GeoOrganism) {
@@ -59,12 +66,25 @@ export class CdpService {
     // return a GeoJSON observable
     return this.http
       .get<any>(url)
-      .pipe(
+      .pipe<OrganismsResponse>(
         map(data => {
           const organisms: GeoOrganism[] = data.features;
+
+          // get unique items from geojson:
+          // https://stackoverflow.com/a/57638289/4385116
+          const uniqueSpecies = new Set<string>();
+          const uniqueBreeds = new Set<string>();
+
+          data.features.forEach((item: GeoOrganism) => {
+            uniqueSpecies.add(item.properties.species);
+            uniqueBreeds.add(item.properties.supplied_breed);
+          });
+
           return {
             organismsLyr: geoJSON(data, { pointToLayer: this.organismMarker }),
-            organismsData: organisms
+            organismsData: organisms,
+            uniqueSpecies: Array.from(uniqueSpecies),
+            uniqueBreeds: Array.from(uniqueBreeds)
           };
         })
       );

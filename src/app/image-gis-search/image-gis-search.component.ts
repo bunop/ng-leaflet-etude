@@ -9,7 +9,14 @@ import 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet-draw';
 import 'leaflet-easybutton';
 
-import { CdpService, GeoOrganism, GeoSpecimen, organismDescription, specimenDescription } from './cdp.service';
+import {
+  CdpService,
+  GeoOrganism,
+  GeoSpecimen,
+  organismDescription,
+  specimenDescription,
+  OrganismsResponse
+} from './cdp.service';
 
 @Component({
   selector: 'app-image-gis-search',
@@ -19,7 +26,7 @@ import { CdpService, GeoOrganism, GeoSpecimen, organismDescription, specimenDesc
 export class ImageGisSearchComponent implements OnInit {
   // this will listen for the sideNav local reference on html template. I can
   // manage the mat-sidenav using this property
-  @ViewChild('sideNav', {static: true}) public sideNav: MatSidenav;
+  @ViewChild('sideNav') public sideNav: MatSidenav;
 
   // this will be my geojson layers
   organismsLyr: L.GeoJSON;
@@ -52,6 +59,10 @@ export class ImageGisSearchComponent implements OnInit {
   // here I will track data to visualize tables
   organismsData: GeoOrganism[];
   specimensData: GeoSpecimen[];
+
+  // in order to use material autocomplete
+  organismsBreeds: string[];
+  organismsSpecies: string[];
 
   // two flags to determine if I'm waiting for data or not
   isFetchingOrganisms = false;
@@ -161,6 +172,7 @@ export class ImageGisSearchComponent implements OnInit {
   public onDrawStart(e: L.DrawEvents.DrawStart) {
     // clear up items from drawn layer
     this.drawnItems.clearLayers();
+
     // tslint:disable-next-line:no-console
     console.log('Draw Started Event!', e);
   }
@@ -175,9 +187,11 @@ export class ImageGisSearchComponent implements OnInit {
     this.initializeData();
   }
 
-  readOrganisms(data: { organismsLyr: L.GeoJSON, organismsData: GeoOrganism[]}) {
+  readOrganisms(data: OrganismsResponse) {
     this.organismsLyr = data.organismsLyr;
     this.organismsData = data.organismsData;
+    this.organismsBreeds = data.uniqueBreeds;
+    this.organismsSpecies = data.uniqueSpecies;
 
     // add organisms layer to marker cluster group
     this.markerClusterGroup.addLayer(this.organismsLyr);
