@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
+import { FormControl } from '@angular/forms';
+import { startWith, map } from 'rxjs/operators';
 
 import { Feature } from 'geojson';
 
@@ -27,6 +30,10 @@ export class ImageGisSearchComponent implements OnInit {
   // this will listen for the sideNav local reference on html template. I can
   // manage the mat-sidenav using this property
   @ViewChild('sideNav') public sideNav: MatSidenav;
+
+  // start with angular material forms
+  specieControl = new FormControl();
+  breedControl = new FormControl();
 
   // this will be my geojson layers
   organismsLyr: L.GeoJSON;
@@ -62,7 +69,10 @@ export class ImageGisSearchComponent implements OnInit {
 
   // in order to use material autocomplete
   organismsBreeds: string[];
+  filteredOrganismBreeds: Observable<string[]>;
+
   organismsSpecies: string[];
+  filteredOrganismSpecies: Observable<string[]>;
 
   // two flags to determine if I'm waiting for data or not
   isFetchingOrganisms = false;
@@ -108,6 +118,16 @@ export class ImageGisSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeData();
+  }
+
+  private _filterBreed(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.organismsBreeds.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  private _filterSpecie(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.organismsSpecies.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
   onMapReady(map: L.Map) {
@@ -220,6 +240,16 @@ export class ImageGisSearchComponent implements OnInit {
     this.cdpService.getOrganisms().subscribe(data => {
       // deal with organism data
       this.readOrganisms(data);
+
+      this.filteredOrganismSpecies = this.specieControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterSpecie(value))
+      );
+
+      this.filteredOrganismBreeds = this.breedControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterBreed(value))
+      );
     });
 
     // get specimens data
