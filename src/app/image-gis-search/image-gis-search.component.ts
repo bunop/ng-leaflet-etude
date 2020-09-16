@@ -130,8 +130,8 @@ export class ImageGisSearchComponent implements OnInit {
     return this.organismsSpecies.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  onMapReady(map: L.Map) {
-    this.map = map;
+  onMapReady(leafletMap: L.Map) {
+    this.map = leafletMap;
 
     // defining the custombuttom here and assigning it to my map after it is ready
     // is the only way to toggle the material sidenav using leaflet.easybutton

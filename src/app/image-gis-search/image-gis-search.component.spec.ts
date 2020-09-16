@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
@@ -19,6 +20,8 @@ describe('ImageGisSearchComponent', () => {
       imports: [
         BrowserAnimationsModule,
         HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
         MaterialModule,
         LeafletModule,
         LeafletMarkerClusterModule,
