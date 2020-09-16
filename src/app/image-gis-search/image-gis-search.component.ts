@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
+import { Observable, zip } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 
@@ -35,6 +35,7 @@ export class ImageGisSearchComponent implements OnInit {
   // start with angular material forms
   specieControl = new FormControl();
   breedControl = new FormControl();
+  partControl = new FormControl();
 
   // this will be my geojson layers
   organismsLyr: L.GeoJSON;
@@ -134,6 +135,11 @@ export class ImageGisSearchComponent implements OnInit {
     return this.uniqueSpecies.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
+  private _filterParts(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.uniqueParts.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+  }
+
   onMapReady(leafletMap: L.Map) {
     this.map = leafletMap;
 
@@ -180,17 +186,27 @@ export class ImageGisSearchComponent implements OnInit {
     // erase all data selected on map
     this.clearData();
 
-    // get organisms data
-    this.cdpService.getOrganisms(lat, lng, rad).subscribe(data => {
+    // After all observables emit, emit values as an array
+    const CDPfetch = zip(
+      this.cdpService.getOrganisms(lat, lng, rad),
+      this.cdpService.getSpecimens(lat, lng, rad)
+    )
+
+    CDPfetch.subscribe((data) => {
       // deal with organism data
-      this.readOrganisms(data);
+      this.readOrganisms(data[0]);
+
+      // deal with specimen data
+      this.readSpecimens(data[1]);
+
+      // zoom map on group
+      this.map.fitBounds(this.markerClusterGroup.getBounds(), {
+        padding: L.point(24, 24),
+        maxZoom: 12,
+        animate: true
+      });
     });
 
-    // get specimens data
-    this.cdpService.getSpecimens(lat, lng, rad).subscribe(data => {
-      // deal with specimen data
-      this.readSpecimens(data);
-    });
   }
 
   public onDrawStart(e: L.DrawEvents.DrawStart) {
@@ -256,11 +272,20 @@ export class ImageGisSearchComponent implements OnInit {
     this.isFetchingOrganisms = true;
     this.isFetchingSpecimens = true;
 
-    // get organisms data
-    this.cdpService.getOrganisms().subscribe(data => {
-      // deal with organism data
-      this.readOrganisms(data);
+    // After all observables emit, emit values as an array
+    const CDPfetch = zip(
+      this.cdpService.getOrganisms(),
+      this.cdpService.getSpecimens()
+    )
 
+    CDPfetch.subscribe((data) => {
+      // deal with organism data
+      this.readOrganisms(data[0]);
+
+      // deal with specimen data
+      this.readSpecimens(data[1]);
+
+      // initialize filters
       this.filteredSpecies = this.specieControl.valueChanges.pipe(
         startWith(''),
         map(value => this._filterSpecie(value))
@@ -270,25 +295,21 @@ export class ImageGisSearchComponent implements OnInit {
         startWith(''),
         map(value => this._filterBreed(value))
       );
-    });
 
-    // get specimens data
-    this.cdpService.getSpecimens().subscribe(data => {
-      // deal with specimen data
-      this.readSpecimens(data);
-
-      this.filteredSpecies = this.specieControl.valueChanges.pipe(
+      this.filteredParts = this.partControl.valueChanges.pipe(
         startWith(''),
-        map(value => this._filterSpecie(value))
+        map(value => this._filterParts(value))
       );
 
-      // zoom map on specimens
-      this.map.fitBounds(this.specimensLyr.getBounds(), {
+      // zoom map on group
+      this.map.fitBounds(this.markerClusterGroup.getBounds(), {
         padding: L.point(24, 24),
         maxZoom: 12,
         animate: true
       });
+
     });
+
   }
 
   clearData() {

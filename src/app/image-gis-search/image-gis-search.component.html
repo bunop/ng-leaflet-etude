@@ -40,6 +40,22 @@
         </div>
 
         <div class="">
+          <mat-form-field class="example-full-width">
+            <input type="text"
+            placeholder="Choose a Organism Part"
+            aria-label="Number"
+            matInput
+            [formControl]="partControl"
+            [matAutocomplete]="autoPart">
+            <mat-autocomplete autoActiveFirstOption #autoPart="matAutocomplete">
+              <mat-option *ngFor="let part of filteredParts | async" [value]="part">
+                {{ part }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+
+        <div class="">
           <button mat-raised-button color="primary" type="submit" class="button" [disabled]="true">Search</button>
         </div>
 
