@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Observable, zip } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 
 import { Feature } from 'geojson';
@@ -33,9 +33,7 @@ export class ImageGisSearchComponent implements OnInit {
   @ViewChild('sideNav') public sideNav: MatSidenav;
 
   // start with angular material forms
-  specieControl = new FormControl();
-  breedControl = new FormControl();
-  partControl = new FormControl();
+  filterForm: FormGroup;
 
   // this will be my geojson layers
   organismsLyr: L.GeoJSON;
@@ -123,6 +121,13 @@ export class ImageGisSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeData();
+
+    // initialize form
+    this.filterForm = new FormGroup({
+      specieControl: new FormControl(),
+      breedControl: new FormControl(),
+      partControl: new FormControl()
+    });
   }
 
   private _filterBreed(value: string): string[] {
@@ -190,7 +195,7 @@ export class ImageGisSearchComponent implements OnInit {
     const CDPfetch = zip(
       this.cdpService.getOrganisms(lat, lng, rad),
       this.cdpService.getSpecimens(lat, lng, rad)
-    )
+    );
 
     CDPfetch.subscribe((data) => {
       // deal with organism data
@@ -276,7 +281,7 @@ export class ImageGisSearchComponent implements OnInit {
     const CDPfetch = zip(
       this.cdpService.getOrganisms(),
       this.cdpService.getSpecimens()
-    )
+    );
 
     CDPfetch.subscribe((data) => {
       // deal with organism data
@@ -286,17 +291,17 @@ export class ImageGisSearchComponent implements OnInit {
       this.readSpecimens(data[1]);
 
       // initialize filters
-      this.filteredSpecies = this.specieControl.valueChanges.pipe(
+      this.filteredSpecies = this.filterForm.get('specieControl').valueChanges.pipe(
         startWith(''),
-        map(value => this._filterSpecie(value))
+        map(value  => this._filterSpecie(value))
       );
 
-      this.filteredBreeds = this.breedControl.valueChanges.pipe(
+      this.filteredBreeds = this.filterForm.get('breedControl').valueChanges.pipe(
         startWith(''),
         map(value => this._filterBreed(value))
       );
 
-      this.filteredParts = this.partControl.valueChanges.pipe(
+      this.filteredParts = this.filterForm.get('partControl').valueChanges.pipe(
         startWith(''),
         map(value => this._filterParts(value))
       );

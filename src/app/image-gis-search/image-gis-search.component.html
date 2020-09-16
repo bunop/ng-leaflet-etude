@@ -6,7 +6,7 @@
         Filter Features
       </mat-card-title>
       <mat-card-content>
-        <form class="">
+        <form class="" [formGroup]="filterForm">
 
           <div class="">
             <mat-form-field class="">
@@ -14,7 +14,7 @@
               placeholder="Choose a Specie"
               aria-label="Number"
               matInput
-              [formControl]="specieControl"
+              formControlName="specieControl"
               [matAutocomplete]="autoSpecie">
               <mat-autocomplete autoActiveFirstOption #autoSpecie="matAutocomplete">
                 <mat-option *ngFor="let specie of filteredSpecies | async" [value]="specie">
@@ -30,7 +30,7 @@
               placeholder="Choose a Breed"
               aria-label="Number"
               matInput
-              [formControl]="breedControl"
+              formControlName="breedControl"
               [matAutocomplete]="autoBreed">
               <mat-autocomplete autoActiveFirstOption #autoBreed="matAutocomplete">
                 <mat-option *ngFor="let breed of filteredBreeds | async" [value]="breed">
@@ -46,7 +46,7 @@
               placeholder="Choose a Organism Part"
               aria-label="Number"
               matInput
-              [formControl]="partControl"
+              formControlName="partControl"
               [matAutocomplete]="autoPart">
               <mat-autocomplete autoActiveFirstOption #autoPart="matAutocomplete">
                 <mat-option *ngFor="let part of filteredParts | async" [value]="part">
