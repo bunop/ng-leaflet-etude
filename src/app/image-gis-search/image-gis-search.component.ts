@@ -131,16 +131,31 @@ export class ImageGisSearchComponent implements OnInit {
   }
 
   private _filterBreed(value: string): string[] {
+    if (value == null) {
+      // TODO: workaround to be able to reset form using autocomplete
+      return this.uniqueSpecies;
+    }
+
     const filterValue = value.toLowerCase();
     return this.uniqueBreeds.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
   private _filterSpecie(value: string): string[] {
+    if (value == null) {
+      // TODO: workaround to be able to reset form using autocomplete
+      return this.uniqueSpecies;
+    }
+
     const filterValue = value.toLowerCase();
     return this.uniqueSpecies.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
   private _filterParts(value: string): string[] {
+    if (value == null) {
+      // TODO: workaround to be able to reset form using autocomplete
+      return this.uniqueSpecies;
+    }
+
     const filterValue = value.toLowerCase();
     return this.uniqueParts.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
@@ -350,9 +365,13 @@ export class ImageGisSearchComponent implements OnInit {
   }
 
   onSubmitForm() {
+    console.log(this.filterForm);
     // console.log(this.filterForm.value.specieControl);
 
-    // setting value for selected specie
+    // closing sideNav
+    this.sideNav.close();
+
+    // setting value for selected items
     this.cdpService.selectedSpecie = this.filterForm.value.specieControl;
 
     // erase all data selected on map
@@ -362,6 +381,25 @@ export class ImageGisSearchComponent implements OnInit {
     this.initializeData();
 
     // console.log(this.cdpService.selectedSpecie);
+  }
+
+  onResetForm() {
+    console.log(this.filterForm);
+
+    // closing sideNav
+    this.sideNav.close();
+
+    // resetting value for selected specie
+    this.cdpService.selectedSpecie = null;
+
+    // erase all data selected on map
+    this.clearData();
+
+    // read all data again
+    this.initializeData();
+
+    // reset form to initial state
+    this.filterForm.reset();
   }
 
 }
