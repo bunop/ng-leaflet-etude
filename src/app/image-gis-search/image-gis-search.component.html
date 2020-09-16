@@ -6,7 +6,7 @@
         Filter Features
       </mat-card-title>
       <mat-card-content>
-        <form class="" [formGroup]="filterForm">
+        <form class="" [formGroup]="filterForm" (ngSubmit)="onSubmitForm()">
 
           <div class="">
             <mat-form-field class="">

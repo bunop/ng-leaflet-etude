@@ -204,12 +204,6 @@ export class ImageGisSearchComponent implements OnInit {
       // deal with specimen data
       this.readSpecimens(data[1]);
 
-      // zoom map on group
-      this.map.fitBounds(this.markerClusterGroup.getBounds(), {
-        padding: L.point(24, 24),
-        maxZoom: 12,
-        animate: true
-      });
     });
 
   }
@@ -353,6 +347,21 @@ export class ImageGisSearchComponent implements OnInit {
     this.map.addLayer(this.selectedItem);
 
     this.layersControl.overlays[key] = this.selectedItem;
+  }
+
+  onSubmitForm() {
+    // console.log(this.filterForm.value.specieControl);
+
+    // setting value for selected specie
+    this.cdpService.selectedSpecie = this.filterForm.value.specieControl;
+
+    // erase all data selected on map
+    this.clearData();
+
+    // read all data again
+    this.initializeData();
+
+    // console.log(this.cdpService.selectedSpecie);
   }
 
 }

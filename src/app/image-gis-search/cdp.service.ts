@@ -45,10 +45,19 @@ export function specimenDescription(geoJsonPoint: GeoSpecimen) {
   return `${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.organism_part}`;
 }
 
+function filterSpecie(feature: GeoOrganism | GeoSpecimen, selectedSpecie: string) {
+  if (selectedSpecie == null) {
+    return true;
+  }
+  return (feature.properties.species == selectedSpecie) ;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class CdpService {
+  selectedSpecie: string;
+
   constructor(private http: HttpClient) { }
 
   organismMarker(geoJsonPoint: GeoOrganism, latlng: LatLng) {
@@ -88,7 +97,14 @@ export class CdpService {
           });
 
           return {
-            organismsLyr: geoJSON(data, { pointToLayer: this.organismMarker }),
+            organismsLyr: geoJSON(
+              data,
+              {
+                pointToLayer: this.organismMarker,
+                filter: (feature: GeoOrganism) => {
+                  return filterSpecie(feature, this.selectedSpecie)
+                }
+              }),
             organismsData: organisms,
             uniqueSpecies: Array.from(uniqueSpecies),
             uniqueBreeds: Array.from(uniqueBreeds)
@@ -124,7 +140,17 @@ export class CdpService {
           });
 
           return {
-            specimensLyr: geoJSON(data, { pointToLayer: this.specimenMarker }),
+            specimensLyr: geoJSON(
+              data,
+              {
+                pointToLayer: this.specimenMarker,
+                filter: (feature: GeoSpecimen) => {
+                  if (this.selectedSpecie == null) {
+                    return true;
+                  }
+                  return (feature.properties.species == this.selectedSpecie) ;
+                }
+              }),
             specimensData: specimens,
             uniqueSpecies: Array.from(uniqueSpecies),
             uniqueParts: Array.from(uniqueParts)
