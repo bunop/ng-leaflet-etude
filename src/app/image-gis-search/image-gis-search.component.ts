@@ -18,7 +18,8 @@ import {
   GeoSpecimen,
   organismDescription,
   specimenDescription,
-  OrganismsResponse
+  OrganismsResponse,
+  SpecimensResponse
 } from './cdp.service';
 
 @Component({
@@ -68,11 +69,14 @@ export class ImageGisSearchComponent implements OnInit {
   specimensData: GeoSpecimen[];
 
   // in order to use material autocomplete
-  organismsBreeds: string[];
-  filteredOrganismBreeds: Observable<string[]>;
+  uniqueBreeds: string[] = [];
+  filteredBreeds: Observable<string[]>;
 
-  organismsSpecies: string[];
-  filteredOrganismSpecies: Observable<string[]>;
+  uniqueSpecies: string[] = [];
+  filteredSpecies: Observable<string[]>;
+
+  uniqueParts: string[] = [];
+  filteredParts: Observable<string[]>;
 
   // two flags to determine if I'm waiting for data or not
   isFetchingOrganisms = false;
@@ -122,12 +126,12 @@ export class ImageGisSearchComponent implements OnInit {
 
   private _filterBreed(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.organismsBreeds.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+    return this.uniqueBreeds.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
   private _filterSpecie(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.organismsSpecies.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+    return this.uniqueSpecies.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
   onMapReady(leafletMap: L.Map) {
@@ -207,11 +211,23 @@ export class ImageGisSearchComponent implements OnInit {
     this.initializeData();
   }
 
+  private updateUniqueSpecies(species: string[]) {
+    // add new species to uniqueSpecies array
+    species.forEach((item: string) => {
+      if (! this.uniqueSpecies.includes(item)) {
+        // console.log(`Add ${item} to unique species`);
+        this.uniqueSpecies.push(item);
+      }
+    });
+  }
+
   readOrganisms(data: OrganismsResponse) {
     this.organismsLyr = data.organismsLyr;
     this.organismsData = data.organismsData;
-    this.organismsBreeds = data.uniqueBreeds;
-    this.organismsSpecies = data.uniqueSpecies;
+    this.uniqueBreeds = data.uniqueBreeds;
+
+    // add new species to uniqueSpecies array
+    this.updateUniqueSpecies(data.uniqueSpecies);
 
     // add organisms layer to marker cluster group
     this.markerClusterGroup.addLayer(this.organismsLyr);
@@ -220,9 +236,13 @@ export class ImageGisSearchComponent implements OnInit {
     this.isFetchingOrganisms = false;
   }
 
-  readSpecimens(data: { specimensLyr: L.GeoJSON, specimensData: GeoSpecimen[]}) {
+  readSpecimens(data: SpecimensResponse) {
     this.specimensLyr = data.specimensLyr;
     this.specimensData = data.specimensData;
+    this.uniqueParts = data.uniqueParts;
+
+    // add new species to uniqueSpecies array
+    this.updateUniqueSpecies(data.uniqueSpecies);
 
     // add organisms layer to marker cluster group
     this.markerClusterGroup.addLayer(this.specimensLyr);
@@ -241,12 +261,12 @@ export class ImageGisSearchComponent implements OnInit {
       // deal with organism data
       this.readOrganisms(data);
 
-      this.filteredOrganismSpecies = this.specieControl.valueChanges.pipe(
+      this.filteredSpecies = this.specieControl.valueChanges.pipe(
         startWith(''),
         map(value => this._filterSpecie(value))
       );
 
-      this.filteredOrganismBreeds = this.breedControl.valueChanges.pipe(
+      this.filteredBreeds = this.breedControl.valueChanges.pipe(
         startWith(''),
         map(value => this._filterBreed(value))
       );
@@ -256,6 +276,11 @@ export class ImageGisSearchComponent implements OnInit {
     this.cdpService.getSpecimens().subscribe(data => {
       // deal with specimen data
       this.readSpecimens(data);
+
+      this.filteredSpecies = this.specieControl.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterSpecie(value))
+      );
 
       // zoom map on specimens
       this.map.fitBounds(this.specimensLyr.getBounds(), {

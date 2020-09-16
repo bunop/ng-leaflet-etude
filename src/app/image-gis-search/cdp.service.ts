@@ -30,6 +30,13 @@ export interface OrganismsResponse {
   uniqueBreeds: string[];
 }
 
+export interface SpecimensResponse {
+  specimensLyr: GeoJSON;
+  specimensData: GeoSpecimen[];
+  uniqueSpecies: string[];
+  uniqueParts: string[];
+}
+
 export function organismDescription(geoJsonPoint: GeoOrganism) {
   return `${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.supplied_breed}`;
 }
@@ -102,12 +109,25 @@ export class CdpService {
     // return a GeoJSON observable
     return this.http
       .get<any>(url)
-      .pipe(
+      .pipe<SpecimensResponse>(
         map(data => {
           const specimens: GeoSpecimen[] = data.features;
+
+          // get unique items from geojson:
+          // https://stackoverflow.com/a/57638289/4385116
+          const uniqueSpecies = new Set<string>();
+          const uniqueParts = new Set<string>();
+
+          data.features.forEach((item: GeoSpecimen) => {
+            uniqueSpecies.add(item.properties.species);
+            uniqueParts.add(item.properties.organism_part);
+          });
+
           return {
             specimensLyr: geoJSON(data, { pointToLayer: this.specimenMarker }),
-            specimensData: specimens
+            specimensData: specimens,
+            uniqueSpecies: Array.from(uniqueSpecies),
+            uniqueParts: Array.from(uniqueParts)
           };
         })
       );

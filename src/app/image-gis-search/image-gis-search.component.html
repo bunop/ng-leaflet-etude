@@ -16,7 +16,7 @@
             [formControl]="specieControl"
             [matAutocomplete]="autoSpecie">
             <mat-autocomplete autoActiveFirstOption #autoSpecie="matAutocomplete">
-              <mat-option *ngFor="let specie of filteredOrganismSpecies | async" [value]="specie">
+              <mat-option *ngFor="let specie of filteredSpecies | async" [value]="specie">
                 {{ specie }}
               </mat-option>
             </mat-autocomplete>
@@ -32,7 +32,7 @@
             [formControl]="breedControl"
             [matAutocomplete]="autoBreed">
             <mat-autocomplete autoActiveFirstOption #autoBreed="matAutocomplete">
-              <mat-option *ngFor="let breed of filteredOrganismBreeds | async" [value]="breed">
+              <mat-option *ngFor="let breed of filteredBreeds | async" [value]="breed">
                 {{ breed }}
               </mat-option>
             </mat-autocomplete>
