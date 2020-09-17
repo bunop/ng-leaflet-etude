@@ -360,6 +360,14 @@ export class ImageGisSearchComponent implements OnInit {
     this.selectedItem = L.geoJSON(feature);
     this.map.addLayer(this.selectedItem);
 
+    // center map on feature
+    this.map.fitBounds(this.selectedItem.getBounds(), {
+      padding: L.point(6, 6),
+      maxZoom: 12,
+      animate: true
+    });
+
+    // add layer to control
     this.layersControl.overlays[key] = this.selectedItem;
   }
 
