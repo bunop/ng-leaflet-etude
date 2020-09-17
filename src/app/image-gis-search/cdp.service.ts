@@ -45,22 +45,23 @@ export function specimenDescription(geoJsonPoint: GeoSpecimen) {
   return `${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.organism_part}`;
 }
 
-function filterSpecie(feature: GeoOrganism | GeoSpecimen, selectedSpecie: string) {
-  if (selectedSpecie == null) {
+export function filterSpecie(feature: GeoOrganism | GeoSpecimen, selectedSpecie: string) {
+  // erasing the form field, will set the field as empty, not null. So:
+  if (selectedSpecie == null || selectedSpecie === '') {
     return true;
   }
   return (feature.properties.species === selectedSpecie);
 }
 
-function filterBreeed(feature: GeoOrganism, selectedBreed: string) {
-  if (selectedBreed == null) {
+export function filterBreeed(feature: GeoOrganism, selectedBreed: string) {
+  if (selectedBreed == null || selectedBreed === '') {
     return true;
   }
   return (feature.properties.supplied_breed === selectedBreed);
 }
 
-function filterPart(feature: GeoSpecimen, selectedPart: string) {
-  if (selectedPart == null) {
+export function filterPart(feature: GeoSpecimen, selectedPart: string) {
+  if (selectedPart == null || selectedPart === '') {
     return true;
   }
   return (feature.properties.organism_part === selectedPart);

@@ -382,7 +382,10 @@ export class ImageGisSearchComponent implements OnInit {
     // read all data again
     this.initializeData();
 
+    // log cdpService properties
     // console.log(this.cdpService.selectedSpecie);
+    // console.log(this.cdpService.selectedBreed);
+    // console.log(this.cdpService.selectedPart);
   }
 
   onResetForm() {
