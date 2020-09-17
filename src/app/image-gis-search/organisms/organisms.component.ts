@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { GeoOrganism, CdpService, filterBreeed, filterSpecie } from '../cdp.service';
+import { GeoOrganism, CdpService, filterBreeed, filterSpecie, filterId } from '../cdp.service';
 
 interface Organism {
   id?: string | number;
@@ -74,7 +74,9 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
   }
 
   private chooseOrganism(geoOrganism: GeoOrganism): boolean {
-    return filterSpecie(geoOrganism, this.cdpService.selectedSpecie) && filterBreeed(geoOrganism, this.cdpService.selectedBreed);
+    return filterSpecie(geoOrganism, this.cdpService.selectedSpecie) &&
+           filterBreeed(geoOrganism, this.cdpService.selectedBreed) &&
+           filterId(geoOrganism, this.cdpService.selectedId);
   }
 
 }

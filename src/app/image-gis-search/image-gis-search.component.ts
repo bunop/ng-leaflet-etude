@@ -77,6 +77,9 @@ export class ImageGisSearchComponent implements OnInit {
   uniqueParts: string[] = [];
   filteredParts: Observable<string[]>;
 
+  uniqueIds: string[] = [];
+  filteredIds: Observable<string[]>;
+
   // two flags to determine if I'm waiting for data or not
   isFetchingOrganisms = false;
   isFetchingSpecimens = false;
@@ -124,6 +127,7 @@ export class ImageGisSearchComponent implements OnInit {
 
     // initialize form
     this.filterForm = new FormGroup({
+      idControl: new FormControl(),
       specieControl: new FormControl(),
       breedControl: new FormControl(),
       partControl: new FormControl()
@@ -158,6 +162,16 @@ export class ImageGisSearchComponent implements OnInit {
 
     const filterValue = value.toLowerCase();
     return this.uniqueParts.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  private _filterIds(value: string): string[] {
+    if (value == null) {
+      // TODO: workaround to be able to reset form using autocomplete
+      return this.uniqueIds;
+    }
+
+    const filterValue = value.toLowerCase();
+    return this.uniqueIds.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 
   onMapReady(leafletMap: L.Map) {
@@ -246,6 +260,16 @@ export class ImageGisSearchComponent implements OnInit {
     });
   }
 
+  private updateUniqueIds(ids: string[]) {
+    // add new species to uniqueSpecies array
+    ids.forEach((item: string) => {
+      if (! this.uniqueIds.includes(item)) {
+        // console.log(`Add ${item} to unique ids`);
+        this.uniqueIds.push(item);
+      }
+    });
+  }
+
   readOrganisms(data: OrganismsResponse) {
     this.organismsLyr = data.organismsLyr;
     this.organismsData = data.organismsData;
@@ -253,6 +277,9 @@ export class ImageGisSearchComponent implements OnInit {
 
     // add new species to uniqueSpecies array
     this.updateUniqueSpecies(data.uniqueSpecies);
+
+    // add new unique ids to list
+    this.updateUniqueIds(data.uniqueIds);
 
     // add organisms layer to marker cluster group
     this.markerClusterGroup.addLayer(this.organismsLyr);
@@ -268,6 +295,9 @@ export class ImageGisSearchComponent implements OnInit {
 
     // add new species to uniqueSpecies array
     this.updateUniqueSpecies(data.uniqueSpecies);
+
+    // add new unique ids to list
+    this.updateUniqueIds(data.uniqueIds);
 
     // add organisms layer to marker cluster group
     this.markerClusterGroup.addLayer(this.specimensLyr);
@@ -308,6 +338,11 @@ export class ImageGisSearchComponent implements OnInit {
       this.filteredParts = this.filterForm.get('partControl').valueChanges.pipe(
         startWith(''),
         map(value => this._filterParts(value))
+      );
+
+      this.filteredIds = this.filterForm.get('idControl').valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterIds(value))
       );
 
       // zoom map on group (if after select I have any group)
@@ -382,6 +417,7 @@ export class ImageGisSearchComponent implements OnInit {
     this.cdpService.selectedSpecie = this.filterForm.value.specieControl;
     this.cdpService.selectedBreed = this.filterForm.value.breedControl;
     this.cdpService.selectedPart = this.filterForm.value.partControl;
+    this.cdpService.selectedId = this.filterForm.value.idControl;
 
     // erase all data selected on map
     this.clearData();
@@ -405,6 +441,7 @@ export class ImageGisSearchComponent implements OnInit {
     this.cdpService.selectedSpecie = null;
     this.cdpService.selectedBreed = null;
     this.cdpService.selectedPart = null;
+    this.cdpService.selectedId = null;
 
     // erase all data selected on map
     this.clearData();

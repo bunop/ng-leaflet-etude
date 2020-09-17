@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { GeoSpecimen, CdpService, filterSpecie, filterPart } from '../cdp.service';
+import { GeoSpecimen, CdpService, filterSpecie, filterPart, filterId, filterDerivedFrom } from '../cdp.service';
 
 interface Specimen {
   id?: string | number;
@@ -72,7 +72,9 @@ export class SpecimensComponent implements OnInit, AfterViewInit {
   }
 
   private chooseSpecimen(geoSpecimen: GeoSpecimen): boolean {
-    return filterSpecie(geoSpecimen, this.cdpService.selectedSpecie) && filterPart(geoSpecimen, this.cdpService.selectedPart);
+    return filterSpecie(geoSpecimen, this.cdpService.selectedSpecie) &&
+           filterPart(geoSpecimen, this.cdpService.selectedPart) &&
+           (filterId(geoSpecimen, this.cdpService.selectedId) || filterDerivedFrom(geoSpecimen, this.cdpService.selectedId));
   }
 
 }

@@ -28,6 +28,7 @@ export interface OrganismsResponse {
   organismsData: GeoOrganism[];
   uniqueSpecies: string[];
   uniqueBreeds: string[];
+  uniqueIds: string[];
 }
 
 export interface SpecimensResponse {
@@ -35,6 +36,7 @@ export interface SpecimensResponse {
   specimensData: GeoSpecimen[];
   uniqueSpecies: string[];
   uniqueParts: string[];
+  uniqueIds: string[];
 }
 
 export interface CircleLocation {
@@ -57,6 +59,22 @@ export function filterSpecie(feature: GeoOrganism | GeoSpecimen, selectedSpecie:
     return true;
   }
   return (feature.properties.species === selectedSpecie);
+}
+
+export function filterId(feature: GeoOrganism | GeoSpecimen, selectedId: string) {
+  // erasing the form field, will set the field as empty, not null. So:
+  if (selectedId == null || selectedId === '') {
+    return true;
+  }
+  return (feature.id === selectedId);
+}
+
+export function filterDerivedFrom(feature: GeoSpecimen, selectedId: string) {
+  // erasing the form field, will set the field as empty, not null. So:
+  if (selectedId == null || selectedId === '') {
+    return true;
+  }
+  return (feature.properties.derived_from === selectedId);
 }
 
 export function filterBreeed(feature: GeoOrganism, selectedBreed: string) {
@@ -82,6 +100,7 @@ export class CdpService {
   selectedSpecie: string;
   selectedBreed: string;
   selectedPart: string;
+  selectedId: string;
 
   // filter data by location
   selectedCircle: CircleLocation = {
@@ -125,10 +144,12 @@ export class CdpService {
           // https://stackoverflow.com/a/57638289/4385116
           const uniqueSpecies = new Set<string>();
           const uniqueBreeds = new Set<string>();
+          const uniqueIds = new Set<string>();
 
           data.features.forEach((item: GeoOrganism) => {
             uniqueSpecies.add(item.properties.species);
             uniqueBreeds.add(item.properties.supplied_breed);
+            uniqueIds.add(item.id.toString());
           });
 
           return {
@@ -137,12 +158,15 @@ export class CdpService {
               {
                 pointToLayer: this.organismMarker,
                 filter: (feature: GeoOrganism) => {
-                  return filterSpecie(feature, this.selectedSpecie) && filterBreeed(feature, this.selectedBreed);
+                  return filterSpecie(feature, this.selectedSpecie) &&
+                         filterBreeed(feature, this.selectedBreed) &&
+                         filterId(feature, this.selectedId);
                 }
               }),
             organismsData: organisms,
             uniqueSpecies: Array.from(uniqueSpecies),
-            uniqueBreeds: Array.from(uniqueBreeds)
+            uniqueBreeds: Array.from(uniqueBreeds),
+            uniqueIds: Array.from(uniqueIds)
           };
         })
       );
@@ -171,10 +195,14 @@ export class CdpService {
           // https://stackoverflow.com/a/57638289/4385116
           const uniqueSpecies = new Set<string>();
           const uniqueParts = new Set<string>();
+          const uniqueIds = new Set<string>();
 
           data.features.forEach((item: GeoSpecimen) => {
             uniqueSpecies.add(item.properties.species);
             uniqueParts.add(item.properties.organism_part);
+            uniqueIds.add(item.id.toString());
+            // need to add also the derived_from field
+            uniqueIds.add(item.properties.derived_from);
           });
 
           return {
@@ -183,12 +211,15 @@ export class CdpService {
               {
                 pointToLayer: this.specimenMarker,
                 filter: (feature: GeoSpecimen) => {
-                  return filterSpecie(feature, this.selectedSpecie) && filterPart(feature, this.selectedPart);
+                  return filterSpecie(feature, this.selectedSpecie) &&
+                         filterPart(feature, this.selectedPart) &&
+                         (filterId(feature, this.selectedId) || filterDerivedFrom(feature, this.selectedId));
                 }
               }),
             specimensData: specimens,
             uniqueSpecies: Array.from(uniqueSpecies),
-            uniqueParts: Array.from(uniqueParts)
+            uniqueParts: Array.from(uniqueParts),
+            uniqueIds: Array.from(uniqueIds)
           };
         })
       );

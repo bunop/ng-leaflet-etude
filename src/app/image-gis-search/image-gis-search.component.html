@@ -11,6 +11,22 @@
           <div class="">
             <mat-form-field class="">
               <input type="text"
+              placeholder="Choose an ID"
+              aria-label="Number"
+              matInput
+              formControlName="idControl"
+              [matAutocomplete]="autoId">
+              <mat-autocomplete autoActiveFirstOption #autoId="matAutocomplete">
+                <mat-option *ngFor="let id of filteredIds | async" [value]="id">
+                  {{ id }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div class="">
+            <mat-form-field class="">
+              <input type="text"
               placeholder="Choose a Specie"
               aria-label="Number"
               matInput
