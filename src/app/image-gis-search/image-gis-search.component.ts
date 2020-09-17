@@ -8,6 +8,7 @@ import { Feature } from 'geojson';
 
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
+import 'leaflet/dist/images/marker-icon.png';
 import 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet-draw';
 import 'leaflet-easybutton';
@@ -391,8 +392,27 @@ export class ImageGisSearchComponent implements OnInit {
       this.selectedItem.clearLayers();
     }
 
-    // read received GeoJSON object
-    this.selectedItem = L.geoJSON(feature);
+    // read received GeoJSON object, Define manually the marker in order to set
+    // the correct urls for icon images
+    this.selectedItem = L.geoJSON(
+      feature,
+      {
+        pointToLayer: function(geojson, latlng) {
+          return L.marker(
+            latlng, {
+              icon: L.icon({
+                iconSize: [ 25, 41 ],
+                iconAnchor: [ 13, 41 ],
+                iconUrl: 'leaflet/marker-icon.png',
+                shadowUrl: 'leaflet/marker-shadow.png'
+              })
+            }
+          );
+        }
+      }
+    );
+
+    // add marker to map
     this.map.addLayer(this.selectedItem);
 
     // center map on feature
