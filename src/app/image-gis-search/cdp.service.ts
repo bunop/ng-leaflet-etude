@@ -49,14 +49,31 @@ function filterSpecie(feature: GeoOrganism | GeoSpecimen, selectedSpecie: string
   if (selectedSpecie == null) {
     return true;
   }
-  return (feature.properties.species == selectedSpecie) ;
+  return (feature.properties.species === selectedSpecie);
 }
+
+function filterBreeed(feature: GeoOrganism, selectedBreed: string) {
+  if (selectedBreed == null) {
+    return true;
+  }
+  return (feature.properties.supplied_breed === selectedBreed);
+}
+
+function filterPart(feature: GeoSpecimen, selectedPart: string) {
+  if (selectedPart == null) {
+    return true;
+  }
+  return (feature.properties.organism_part === selectedPart);
+}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CdpService {
   selectedSpecie: string;
+  selectedBreed: string;
+  selectedPart: string;
 
   constructor(private http: HttpClient) { }
 
@@ -102,7 +119,7 @@ export class CdpService {
               {
                 pointToLayer: this.organismMarker,
                 filter: (feature: GeoOrganism) => {
-                  return filterSpecie(feature, this.selectedSpecie)
+                  return filterSpecie(feature, this.selectedSpecie) && filterBreeed(feature, this.selectedBreed);
                 }
               }),
             organismsData: organisms,
@@ -145,10 +162,7 @@ export class CdpService {
               {
                 pointToLayer: this.specimenMarker,
                 filter: (feature: GeoSpecimen) => {
-                  if (this.selectedSpecie == null) {
-                    return true;
-                  }
-                  return (feature.properties.species == this.selectedSpecie) ;
+                  return filterSpecie(feature, this.selectedSpecie) && filterPart(feature, this.selectedPart);
                 }
               }),
             specimensData: specimens,

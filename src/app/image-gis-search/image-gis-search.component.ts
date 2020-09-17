@@ -373,6 +373,8 @@ export class ImageGisSearchComponent implements OnInit {
 
     // setting value for selected items
     this.cdpService.selectedSpecie = this.filterForm.value.specieControl;
+    this.cdpService.selectedBreed = this.filterForm.value.breedControl;
+    this.cdpService.selectedPart = this.filterForm.value.partControl;
 
     // erase all data selected on map
     this.clearData();
@@ -391,6 +393,8 @@ export class ImageGisSearchComponent implements OnInit {
 
     // resetting value for selected specie
     this.cdpService.selectedSpecie = null;
+    this.cdpService.selectedBreed = null;
+    this.cdpService.selectedPart = null;
 
     // erase all data selected on map
     this.clearData();
