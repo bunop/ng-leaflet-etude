@@ -120,7 +120,7 @@ export class ImageGisSearchComponent implements OnInit {
   constructor(private cdpService: CdpService) { }
 
   ngOnInit(): void {
-    this.initializeData();
+    this.collectData();
 
     // initialize form
     this.filterForm = new FormGroup({
@@ -191,41 +191,33 @@ export class ImageGisSearchComponent implements OnInit {
     const circleLayer = (e.layer as L.Circle);
     this.drawnItems.addLayer(circleLayer);
 
-    // create a custom query
+    // create a custom query and set data into CDP service
     const point = circleLayer.getLatLng();
-    const lat = point.lat;
-    const lng = point.lng;
-    const rad = Math.round(circleLayer.getRadius() / 1000); // get radius in Km
+    this.cdpService.selectedCircle.lat = point.lat;
+    this.cdpService.selectedCircle.lng = point.lng;
+    this.cdpService.selectedCircle.rad = Math.round(circleLayer.getRadius() / 1000); // get radius in Km
 
     // console.log([lat, lng, rad]);
-
-    // do another query. Setting flag values
-    this.isFetchingOrganisms = true;
-    this.isFetchingSpecimens = true;
 
     // erase all data selected on map
     this.clearData();
 
-    // After all observables emit, emit values as an array
-    const CDPfetch = zip(
-      this.cdpService.getOrganisms(lat, lng, rad),
-      this.cdpService.getSpecimens(lat, lng, rad)
-    );
+    // fetching data using coordinates stored in CDP service
+    this.collectData(false);
+  }
 
-    CDPfetch.subscribe((data) => {
-      // deal with organism data
-      this.readOrganisms(data[0]);
-
-      // deal with specimen data
-      this.readSpecimens(data[1]);
-
-    });
-
+  public resetCDPselectedCircle(): void {
+    this.cdpService.selectedCircle.lat = null;
+    this.cdpService.selectedCircle.lng = null;
+    this.cdpService.selectedCircle.rad = null;
   }
 
   public onDrawStart(e: L.DrawEvents.DrawStart) {
     // clear up items from drawn layer
     this.drawnItems.clearLayers();
+
+    // rest circlelocation in CDP
+    this.resetCDPselectedCircle();
 
     // tslint:disable-next-line:no-console
     console.log('Draw Started Event!', e);
@@ -237,8 +229,11 @@ export class ImageGisSearchComponent implements OnInit {
     // erase all data selected on map
     this.clearData();
 
+    // rest circlelocation in CDP
+    this.resetCDPselectedCircle();
+
     // read all data again
-    this.initializeData();
+    this.collectData();
   }
 
   private updateUniqueSpecies(species: string[]) {
@@ -281,7 +276,7 @@ export class ImageGisSearchComponent implements OnInit {
     this.isFetchingSpecimens = false;
   }
 
-  initializeData() {
+  public collectData(fitOnMap: boolean = true): void {
     // setting flag values
     this.isFetchingOrganisms = true;
     this.isFetchingSpecimens = true;
@@ -316,12 +311,14 @@ export class ImageGisSearchComponent implements OnInit {
       );
 
       // zoom map on group (if after select I have any group)
-      if (this.markerClusterGroup.getLayers().length > 0) {
-        this.map.fitBounds(this.markerClusterGroup.getBounds(), {
-          padding: L.point(24, 24),
-          maxZoom: 12,
-          animate: true
-        });
+      if (fitOnMap) {
+        if (this.markerClusterGroup.getLayers().length > 0) {
+          this.map.fitBounds(this.markerClusterGroup.getBounds(), {
+            padding: L.point(24, 24),
+            maxZoom: 12,
+            animate: true
+          });
+        }
       }
 
     });
@@ -382,7 +379,7 @@ export class ImageGisSearchComponent implements OnInit {
     this.clearData();
 
     // read all data again
-    this.initializeData();
+    this.collectData();
 
     // log cdpService properties
     // console.log(this.cdpService.selectedSpecie);
@@ -405,7 +402,7 @@ export class ImageGisSearchComponent implements OnInit {
     this.clearData();
 
     // read all data again
-    this.initializeData();
+    this.collectData();
 
     // reset form to initial state
     this.filterForm.reset();

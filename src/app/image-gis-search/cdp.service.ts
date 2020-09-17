@@ -37,6 +37,12 @@ export interface SpecimensResponse {
   uniqueParts: string[];
 }
 
+export interface CircleLocation {
+  lat: number;
+  lng: number;
+  rad: number;
+}
+
 export function organismDescription(geoJsonPoint: GeoOrganism) {
   return `${geoJsonPoint.id}<br>${geoJsonPoint.properties.species}<br>${geoJsonPoint.properties.supplied_breed}`;
 }
@@ -72,9 +78,17 @@ export function filterPart(feature: GeoSpecimen, selectedPart: string) {
   providedIn: 'root'
 })
 export class CdpService {
+  // used to filter data
   selectedSpecie: string;
   selectedBreed: string;
   selectedPart: string;
+
+  // filter data by location
+  selectedCircle: CircleLocation = {
+    lat: null,
+    lng: null,
+    rad: null
+  };
 
   constructor(private http: HttpClient) { }
 
@@ -86,12 +100,15 @@ export class CdpService {
     return circleMarker(latlng, { color: 'green', radius: 10 }).bindTooltip(specimenDescription(geoJsonPoint));
   }
 
-  getOrganisms(lat?: number, lng?: number, rad?: number) {
+  getOrganisms() {
     let url = 'https://api.image2020genebank.eu/backend/organism.geojson/?page_size=1000';
 
     // console.log([lat, lng, rad]);
 
-    if (lat && lng && rad) {
+    if (this.selectedCircle.lat && this.selectedCircle.lng && this.selectedCircle.rad) {
+      const lat = this.selectedCircle.lat;
+      const lng = this.selectedCircle.lng;
+      const rad = this.selectedCircle.rad;
       url += `&lat=${lat}&lng=${lng}&rad=${rad}`;
     }
 
@@ -131,10 +148,13 @@ export class CdpService {
       );
   }
 
-  getSpecimens(lat?: number, lng?: number, rad?: number) {
+  getSpecimens() {
     let url = 'https://api.image2020genebank.eu/backend/specimen.geojson/?page_size=1000';
 
-    if (lat && lng && rad) {
+    if (this.selectedCircle.lat && this.selectedCircle.lng && this.selectedCircle.rad) {
+      const lat = this.selectedCircle.lat;
+      const lng = this.selectedCircle.lng;
+      const rad = this.selectedCircle.rad;
       url += `&lat=${lat}&lng=${lng}&rad=${rad}`;
     }
 
