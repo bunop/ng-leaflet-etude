@@ -315,12 +315,14 @@ export class ImageGisSearchComponent implements OnInit {
         map(value => this._filterParts(value))
       );
 
-      // zoom map on group
-      this.map.fitBounds(this.markerClusterGroup.getBounds(), {
-        padding: L.point(24, 24),
-        maxZoom: 12,
-        animate: true
-      });
+      // zoom map on group (if after select I have any group)
+      if (this.markerClusterGroup.getLayers().length > 0) {
+        this.map.fitBounds(this.markerClusterGroup.getBounds(), {
+          padding: L.point(24, 24),
+          maxZoom: 12,
+          animate: true
+        });
+      }
 
     });
 
