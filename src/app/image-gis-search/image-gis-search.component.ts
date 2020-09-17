@@ -414,10 +414,12 @@ export class ImageGisSearchComponent implements OnInit {
     this.sideNav.close();
 
     // setting value for selected items
-    this.cdpService.selectedSpecie = this.filterForm.value.specieControl;
-    this.cdpService.selectedBreed = this.filterForm.value.breedControl;
-    this.cdpService.selectedPart = this.filterForm.value.partControl;
-    this.cdpService.selectedId = this.filterForm.value.idControl;
+    this.cdpService.setSelected({
+      selectedSpecie: this.filterForm.value.specieControl,
+      selectedBreed: this.filterForm.value.breedControl,
+      selectedPart: this.filterForm.value.partControl,
+      selectedId: this.filterForm.value.idControl
+    });
 
     // erase all data selected on map
     this.clearData();
@@ -437,11 +439,8 @@ export class ImageGisSearchComponent implements OnInit {
     // closing sideNav
     this.sideNav.close();
 
-    // resetting value for selected specie
-    this.cdpService.selectedSpecie = null;
-    this.cdpService.selectedBreed = null;
-    this.cdpService.selectedPart = null;
-    this.cdpService.selectedId = null;
+    // resetting value for selected items
+    this.cdpService.resetSelected();
 
     // erase all data selected on map
     this.clearData();

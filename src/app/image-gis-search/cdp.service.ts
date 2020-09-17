@@ -111,6 +111,37 @@ export class CdpService {
 
   constructor(private http: HttpClient) { }
 
+  public setSelected(values: {
+    selectedSpecie: string,
+    selectedBreed: string,
+    selectedPart: string,
+    selectedId: string}
+  ): void {
+    this.selectedSpecie = values.selectedSpecie;
+    this.selectedBreed = values.selectedBreed;
+    this.selectedPart = values.selectedPart;
+    this.selectedId = values.selectedId;
+  }
+
+  public resetSelected(): void {
+    this.selectedSpecie = null;
+    this.selectedBreed = null;
+    this.selectedPart = null;
+    this.selectedId = null;
+  }
+
+  public chooseOrganism(geoOrganism: GeoOrganism): boolean {
+    return filterSpecie(geoOrganism, this.selectedSpecie) &&
+           filterBreeed(geoOrganism, this.selectedBreed) &&
+           filterId(geoOrganism, this.selectedId);
+  }
+
+  public chooseSpecimen(geoSpecimen: GeoSpecimen): boolean {
+    return filterSpecie(geoSpecimen, this.selectedSpecie) &&
+           filterPart(geoSpecimen, this.selectedPart) &&
+           (filterId(geoSpecimen, this.selectedId) || filterDerivedFrom(geoSpecimen, this.selectedId));
+  }
+
   organismMarker(geoJsonPoint: GeoOrganism, latlng: LatLng) {
     return circleMarker(latlng, { color: 'deeppink', radius: 10 }).bindTooltip(organismDescription(geoJsonPoint));
   }
@@ -158,9 +189,7 @@ export class CdpService {
               {
                 pointToLayer: this.organismMarker,
                 filter: (feature: GeoOrganism) => {
-                  return filterSpecie(feature, this.selectedSpecie) &&
-                         filterBreeed(feature, this.selectedBreed) &&
-                         filterId(feature, this.selectedId);
+                  return this.chooseOrganism(feature);
                 }
               }),
             organismsData: organisms,
@@ -211,9 +240,7 @@ export class CdpService {
               {
                 pointToLayer: this.specimenMarker,
                 filter: (feature: GeoSpecimen) => {
-                  return filterSpecie(feature, this.selectedSpecie) &&
-                         filterPart(feature, this.selectedPart) &&
-                         (filterId(feature, this.selectedId) || filterDerivedFrom(feature, this.selectedId));
+                  return this.chooseSpecimen(feature);
                 }
               }),
             specimensData: specimens,

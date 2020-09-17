@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { GeoOrganism, CdpService, filterBreeed, filterSpecie, filterId } from '../cdp.service';
+import { GeoOrganism, CdpService } from '../cdp.service';
 
 interface Organism {
   id?: string | number;
@@ -40,7 +40,7 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
     // I need to flatten GeoOrganism objects in order to sort tables properly with
     // default MatSort functions
     for (const geoOrganism of this.geoOrganisms) {
-      if ( this.chooseOrganism(geoOrganism) ) {
+      if ( this.cdpService.chooseOrganism(geoOrganism) ) {
         organisms.push({
           id: geoOrganism.id,
           species: geoOrganism.properties.species,
@@ -71,12 +71,6 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
 
     // pass selected organism like an event
     this.selectedOrganism.emit(geoOrganism);
-  }
-
-  private chooseOrganism(geoOrganism: GeoOrganism): boolean {
-    return filterSpecie(geoOrganism, this.cdpService.selectedSpecie) &&
-           filterBreeed(geoOrganism, this.cdpService.selectedBreed) &&
-           filterId(geoOrganism, this.cdpService.selectedId);
   }
 
 }
