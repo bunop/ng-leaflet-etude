@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { GeoOrganism } from '../cdp.service';
+import { GeoOrganism, CdpService, filterBreeed, filterSpecie } from '../cdp.service';
 
 interface Organism {
   id?: string | number;
@@ -32,7 +32,7 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
   public displayedColumns = ['id', 'species', 'supplied_breed', 'sex', 'show_on_map', 'details'];
   public dataSource = new MatTableDataSource<Organism>();
 
-  constructor() { }
+  constructor(private cdpService: CdpService) { }
 
   ngOnInit(): void {
     const organisms: Organism[] = [];
@@ -40,12 +40,14 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
     // I need to flatten GeoOrganism objects in order to sort tables properly with
     // default MatSort functions
     for (const geoOrganism of this.geoOrganisms) {
-      organisms.push({
-        id: geoOrganism.id,
-        species: geoOrganism.properties.species,
-        supplied_breed: geoOrganism.properties.supplied_breed,
-        sex: geoOrganism.properties.sex
-      });
+      if ( this.chooseOrganism(geoOrganism) ) {
+        organisms.push({
+          id: geoOrganism.id,
+          species: geoOrganism.properties.species,
+          supplied_breed: geoOrganism.properties.supplied_breed,
+          sex: geoOrganism.properties.sex
+        });
+      }
     }
 
     this.dataSource.data = organisms;
@@ -69,6 +71,10 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
 
     // pass selected organism like an event
     this.selectedOrganism.emit(geoOrganism);
+  }
+
+  private chooseOrganism(geoOrganism: GeoOrganism): boolean {
+    return filterSpecie(geoOrganism, this.cdpService.selectedSpecie) && filterBreeed(geoOrganism, this.cdpService.selectedBreed);
   }
 
 }

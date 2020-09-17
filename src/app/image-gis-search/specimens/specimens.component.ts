@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { GeoSpecimen } from '../cdp.service';
+import { GeoSpecimen, CdpService, filterSpecie, filterPart } from '../cdp.service';
 
 interface Specimen {
   id?: string | number;
@@ -32,18 +32,20 @@ export class SpecimensComponent implements OnInit, AfterViewInit {
   public displayedColumns = ['id', 'species', 'organism_part', 'derived_from', 'show_on_map', 'details'];
   public dataSource = new MatTableDataSource<Specimen>();
 
-  constructor() { }
+  constructor(private cdpService: CdpService) { }
 
   ngOnInit(): void {
     const specimens: Specimen[] = [];
 
     for (const geoSpecimen of this.geoSpecimens) {
-      specimens.push({
-        id: geoSpecimen.id,
-        species: geoSpecimen.properties.species,
-        organism_part: geoSpecimen.properties.organism_part,
-        derived_from: geoSpecimen.properties.derived_from
-      });
+      if (this.chooseSpecimen(geoSpecimen)) {
+        specimens.push({
+          id: geoSpecimen.id,
+          species: geoSpecimen.properties.species,
+          organism_part: geoSpecimen.properties.organism_part,
+          derived_from: geoSpecimen.properties.derived_from
+        });
+      }
     }
 
     this.dataSource.data = specimens;
@@ -67,6 +69,10 @@ export class SpecimensComponent implements OnInit, AfterViewInit {
 
     // pass selected organism like an event
     this.selectedSpecimen.emit(geoSpecimen);
+  }
+
+  private chooseSpecimen(geoSpecimen: GeoSpecimen): boolean {
+    return filterSpecie(geoSpecimen, this.cdpService.selectedSpecie) && filterPart(geoSpecimen, this.cdpService.selectedPart);
   }
 
 }
