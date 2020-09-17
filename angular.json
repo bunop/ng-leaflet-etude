@@ -5,7 +5,11 @@
   "projects": {
     "ng-leaflet-etude": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -137,10 +141,5 @@
       }
     }
   },
-  "defaultProject": "ng-leaflet-etude",
-  "schematics": {
-    "@schematics/angular:component": {
-      "styleext": "scss"
-    }
-  }
+  "defaultProject": "ng-leaflet-etude"
 }
