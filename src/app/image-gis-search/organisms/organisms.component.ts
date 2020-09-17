@@ -59,11 +59,11 @@ export class OrganismsComponent implements OnInit, AfterViewInit {
   }
 
   public pageChanged = (event: object) => {
-    console.log(event);
+    // console.log(event);
   }
 
   public customSort = (event: object) => {
-    console.log(event);
+    // console.log(event);
   }
 
   showOnMap(id: string | number) {

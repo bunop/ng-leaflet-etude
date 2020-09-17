@@ -175,7 +175,7 @@ export class ImageGisSearchComponent implements OnInit {
     customButton.addTo(this.map);
 
     this.map.on('click', e => {
-      console.log(e);
+      // console.log(e);
     });
   }
 
@@ -220,11 +220,11 @@ export class ImageGisSearchComponent implements OnInit {
     this.resetCDPselectedCircle();
 
     // tslint:disable-next-line:no-console
-    console.log('Draw Started Event!', e);
+    // console.log('Draw Started Event!', e);
   }
 
   public onDrawDeleted(e: L.DrawEvents.Deleted) {
-    console.log('deleted event!!', e);
+    // console.log('deleted event!!', e);
 
     // erase all data selected on map
     this.clearData();
@@ -364,7 +364,7 @@ export class ImageGisSearchComponent implements OnInit {
   }
 
   onSubmitForm() {
-    console.log(this.filterForm);
+    // console.log(this.filterForm);
     // console.log(this.filterForm.value.specieControl);
 
     // closing sideNav
@@ -388,7 +388,7 @@ export class ImageGisSearchComponent implements OnInit {
   }
 
   onResetForm() {
-    console.log(this.filterForm);
+    // console.log(this.filterForm);
 
     // closing sideNav
     this.sideNav.close();
