@@ -397,7 +397,7 @@ export class ImageGisSearchComponent implements OnInit {
     this.selectedItem = L.geoJSON(
       feature,
       {
-        pointToLayer: function(geojson, latlng) {
+        pointToLayer: (geojson, latlng) => {
           return L.marker(
             latlng, {
               icon: L.icon({
