@@ -13,6 +13,13 @@ import 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet-draw';
 import 'leaflet-easybutton';
 
+// geotiff extensions
+import 'plotty';
+import GeoTIFF from 'geotiff';
+import 'geotiff-layer-leaflet/dist/geotiff-layer-leaflet';
+import 'geotiff-layer-leaflet/src/geotiff-layer-leaflet-plotty';
+import 'geotiff-layer-leaflet/src/geotiff-layer-leaflet-vector-arrows';
+
 import {
   CdpService,
   GeoOrganism,
@@ -188,6 +195,20 @@ export class ImageGisSearchComponent implements OnInit {
     );
 
     customButton.addTo(this.map);
+
+    const cloudmask = new L.LeafletGeotiff(
+      './assets/aridity.tif',
+      {
+        band: 0,
+        name: 'FAO Aridity',
+        opacity: 0.5,
+        renderer: new L.LeafletGeotiff.Plotty({
+          colorScale: 'rainbow'
+        })
+      }
+    );
+
+    this.layersControl.overlays["FAO aridity"] = cloudmask;
 
     this.map.on('click', e => {
       // console.log(e);
