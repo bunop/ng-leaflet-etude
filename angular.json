@@ -30,7 +30,8 @@
                 "output": "leaflet/"
               },
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/404.html"
             ],
             "styles": [
               "src/styles.scss",
@@ -102,7 +103,8 @@
                 "output": "leaflet/"
               },
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/404.html"
             ],
             "styles": [
               "src/styles.scss",
