@@ -20,6 +20,7 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
 
 import { ImageGisSearchComponent } from './image-gis-search/image-gis-search.component';
 import { ImageGisSearchModule } from './image-gis-search/image-gis-search.module';
+import { NotFoundComponent } from './error-pages/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ImageGisSearchModule } from './image-gis-search/image-gis-search.module
     HomeComponent,
     HeaderComponent,
     SidenavListComponent,
-    ImageGisSearchComponent
+    ImageGisSearchComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
