@@ -201,6 +201,7 @@ export class ImageGisSearchComponent implements OnInit {
         this.sideNav.toggle();
       }
     );
+    customButton.options.position = 'bottomright'; // topleft, topright, bottomleft, bottomright
 
     customButton.addTo(this.map);
 
@@ -228,8 +229,12 @@ export class ImageGisSearchComponent implements OnInit {
 
     this.layersControl.overlays['FAO aridity'] = aridity;
 
-    this.map.on('click', e => {
-      // console.log(e);
+    // This event is actually of type LeafletMouseEvent, which extends LeafletEvent.
+    // So cast the event to gain access to the properties of LeafletMouseEvent
+    // https://stackoverflow.com/a/48746870/4385116:
+    this.map.on('click', <LeafletMouseEvent>(e) => {
+      // console.log(e.latlng);
+      console.log(`aridity value at ${e.latlng}: ` + aridity.getValueAtLatLng(e.latlng.lat, e.latlng.lng));
     });
   }
 

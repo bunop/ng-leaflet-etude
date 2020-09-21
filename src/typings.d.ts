@@ -8,6 +8,7 @@ declare module 'leaflet' {
   export class LeafletGeotiff {
     constructor (url: string, options: object);
     addTo(map: Map|LayerGroup): this;
+    getValueAtLatLng(lat: number, lng: number): number;
   }
 
   namespace LeafletGeotiff {
