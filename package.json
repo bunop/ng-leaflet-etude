@@ -31,6 +31,7 @@
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
     "leaflet-easybutton": "^2.4.0",
+    "leaflet.coordinates": "^0.1.5",
     "leaflet.markercluster": "^1.4.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
