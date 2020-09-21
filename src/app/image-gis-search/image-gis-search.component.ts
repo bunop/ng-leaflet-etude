@@ -13,6 +13,16 @@ import 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet-draw';
 import 'leaflet-easybutton';
 
+// geotiff extensions
+import plotty from 'plotty';
+import GeoTIFF from 'geotiff';
+import 'geotiff-layer-leaflet/dist/geotiff-layer-leaflet';
+import 'geotiff-layer-leaflet/src/geotiff-layer-leaflet-plotty';
+import 'geotiff-layer-leaflet/src/geotiff-layer-leaflet-vector-arrows';
+
+// coordinates extension
+import 'leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.src.js';
+
 import {
   CdpService,
   GeoOrganism,
@@ -178,6 +188,11 @@ export class ImageGisSearchComponent implements OnInit {
   onMapReady(leafletMap: L.Map) {
     this.map = leafletMap;
 
+    // add coordinates to map
+    L.control.coordinates({
+      // enableUserInput: false, //optional default true
+    }).addTo(this.map);
+
     // defining the custombuttom here and assigning it to my map after it is ready
     // is the only way to toggle the material sidenav using leaflet.easybutton
     const customButton = L.easyButton(
@@ -186,11 +201,40 @@ export class ImageGisSearchComponent implements OnInit {
         this.sideNav.toggle();
       }
     );
+    customButton.options.position = 'bottomright'; // topleft, topright, bottomleft, bottomright
 
     customButton.addTo(this.map);
 
-    this.map.on('click', e => {
-      // console.log(e);
+    // Hyperarid AI < 0.05 - 7.5% of the global land area
+    // Arid 0.05 < AI < 0.20 - 12.1% of the global land area
+    // Semi-arid 0.20 < AI < 0.50 - 17.7% of the global land area
+    // Dry subhumid 0.50 < AI < 0.65 - 9.9% of the global land area
+    plotty.addColorScale('aridity', ['#A80000', '#FF0000', '#FFAA00', '#FFFF00', '#D1FF73'], [0.01, 0.05, 0.20, 0.50, 0.65]);
+
+    const aridity = new L.LeafletGeotiff(
+      './assets/aridity.tif',
+      {
+        band: 0,
+        name: 'FAO Aridity',
+        opacity: 0.5,
+        renderer: new L.LeafletGeotiff.Plotty({
+          colorScale: 'aridity',
+          // displayMin: 0.01,
+          // displayMax: 7.8,
+          clampLow: false,
+          clampHigh: true,
+        })
+      }
+    ); // .addTo(this.map);
+
+    this.layersControl.overlays['FAO aridity'] = aridity;
+
+    // This event is actually of type LeafletMouseEvent, which extends LeafletEvent.
+    // So cast the event to gain access to the properties of LeafletMouseEvent
+    // https://stackoverflow.com/a/48746870/4385116:
+    this.map.on('click', <LeafletMouseEvent>(e) => {
+      // console.log(e.latlng);
+      console.log(`aridity value at ${e.latlng}: ` + aridity.getValueAtLatLng(e.latlng.lat, e.latlng.lng));
     });
   }
 
