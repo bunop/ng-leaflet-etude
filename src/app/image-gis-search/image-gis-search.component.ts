@@ -20,6 +20,9 @@ import 'geotiff-layer-leaflet/dist/geotiff-layer-leaflet';
 import 'geotiff-layer-leaflet/src/geotiff-layer-leaflet-plotty';
 import 'geotiff-layer-leaflet/src/geotiff-layer-leaflet-vector-arrows';
 
+// coordinates extension
+import 'leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.src.js';
+
 import {
   CdpService,
   GeoOrganism,
@@ -184,6 +187,11 @@ export class ImageGisSearchComponent implements OnInit {
 
   onMapReady(leafletMap: L.Map) {
     this.map = leafletMap;
+
+    // add coordinates to map
+    L.control.coordinates({
+      // enableUserInput: false, //optional default true
+    }).addTo(this.map);
 
     // defining the custombuttom here and assigning it to my map after it is ready
     // is the only way to toggle the material sidenav using leaflet.easybutton

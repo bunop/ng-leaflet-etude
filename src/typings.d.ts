@@ -15,4 +15,12 @@ declare module 'leaflet' {
       constructor (options: object);
     }
   }
+
+  namespace control {
+    export class Coordinates {
+      addTo(map: Map|LayerGroup): this;
+    }
+    
+    function coordinates(v: any): Coordinates;
+  }
 }
