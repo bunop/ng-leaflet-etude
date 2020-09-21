@@ -200,8 +200,7 @@ export class ImageGisSearchComponent implements OnInit {
     // Arid 0.05 < AI < 0.20 - 12.1% of the global land area
     // Semi-arid 0.20 < AI < 0.50 - 17.7% of the global land area
     // Dry subhumid 0.50 < AI < 0.65 - 9.9% of the global land area
-
-    plotty.addColorScale("aridity", ["#FFFFFFFF", "#A80000", "#FF0000", "#FFAA00", "#FFFF00", "#D1FF73"], [0, 0.01, 0.05, 0.20, 0.50, 0.65]);
+    plotty.addColorScale('aridity', ['#A80000', '#FF0000', '#FFAA00', '#FFFF00', '#D1FF73'], [0.01, 0.05, 0.20, 0.50, 0.65]);
 
     const aridity = new L.LeafletGeotiff(
       './assets/aridity.tif',
@@ -209,17 +208,17 @@ export class ImageGisSearchComponent implements OnInit {
         band: 0,
         name: 'FAO Aridity',
         opacity: 0.5,
-        displayMin: 0.01,
-        displayMax: 7.8,
-        clampLow: true,
-        clampHigh: true,
         renderer: new L.LeafletGeotiff.Plotty({
-          colorScale: 'aridity'
+          colorScale: 'aridity',
+          // displayMin: 0.01,
+          // displayMax: 7.8,
+          clampLow: false,
+          clampHigh: true,
         })
       }
-    )//.addTo(this.map);
+    ); // .addTo(this.map);
 
-    this.layersControl.overlays["FAO aridity"] = aridity;
+    this.layersControl.overlays['FAO aridity'] = aridity;
 
     this.map.on('click', e => {
       // console.log(e);
